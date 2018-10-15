@@ -16,8 +16,15 @@ Route::get('/', function () {
 });
 
 Route::get('/home', function () {
-    return view('main');
+    return view('home');
 });
+
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/products', 'ProductController@index');
+    Route::get('/products/{id}', 'ProductController@show');
+
+    // routes admin
+    Route::resource('/admin/products', 'Admin\ProductController');
+});

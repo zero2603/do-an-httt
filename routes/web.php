@@ -26,5 +26,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/products/{id}', 'ProductController@show');
 
     // routes admin
+    Route::get('/admin', function() {
+        return view('layouts.admin');
+    });
     Route::resource('/admin/products', 'Admin\ProductController');
 });

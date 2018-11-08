@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h1 class="page-header">{{__('Thêm sản phẩm')}}</h1>
+<h1 class="page-header">{{__('Sửa sản phẩm')}}</h1>
 
 <div>
         <form method="POST" action={{route('products.update', $product->id)}}>
@@ -41,19 +41,23 @@
                     <button type="submit" class="btn btn-primary">Cập nhật</button>
                 </div>
                 <div class="col-sm-1">
-                    {{-- Delete product --}}
-                    <form method="POST" action={{route('products.destroy', $product->id)}}>
-                        @method('DELETE')
-                        {{ csrf_field() }}
-                        <button type="submit" class="btn btn-danger">Xóa</button>
-                    </form>
+                    <button type="button" class="btn btn-danger" onclick="remove()">Xóa</button>
                 </div>
             </div>
             
+        </form>
+        <form method="POST" action={{route('products.destroy', $product->id)}} id="delete-product-form" class="d-none">
+            @method('DELETE')
+            {{ csrf_field() }}
         </form>
 </div>
 
 {{-- ckeditor --}}
 <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
 <script> CKEDITOR.replace('editor1'); </script>
+<script>
+    function remove() {
+        document.getElementById("delete-product-form").submit();
+    }
+</script>
 @endsection

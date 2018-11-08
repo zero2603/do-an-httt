@@ -19,6 +19,7 @@
 
     <!-- Custom CSS -->
     <link href="{{asset('assets/css/sb-admin-2.css')}}" rel="stylesheet">
+    <link href="{{asset('assets/css/custom-admin.css')}}" rel="stylesheet">
 
     <!-- Morris Charts CSS -->
     <link href="{{asset('assets/vendor/morrisjs/morris.css')}}" rel="stylesheet">
@@ -91,6 +92,9 @@
                             <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li>
+                            <a href="/admin/users"><i class="fa fa-users fa-fw"></i> Người dùng</a>
+                        </li>
+                        <li>
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Sản phẩm<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
@@ -99,9 +103,27 @@
                                 <li>
                                     <a href="/admin/products"> Tất cả sản phẩm</a> 
                                 </li>
+                                <li>
+                                    <a href="/admin/product-attribute/sizes"> Thuộc tính sản phẩm - Size</a> 
+                                </li>
+                                <li>
+                                    <a href="/admin/product-attribute/colors"> Thuộc tính sản phẩm - Màu sắc</a> 
+                                </li>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
+                        <li>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Danh mục sản phẩm<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="/admin/categories/create"> Thêm danh mục</a>
+                                </li>
+                                <li>
+                                    <a href="/admin/categories"> Tất cả danh mục</a> 
+                                </li>
+                            </ul>
+                                <!-- /.nav-second-level -->
+                        </li>                        
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->

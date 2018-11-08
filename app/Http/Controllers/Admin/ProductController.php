@@ -4,10 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use \App\Product;
+use \App\Size;
+use \App\Color;
+use \App\Category;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('admin');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -26,7 +34,10 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('admin.products.create');
+        $categories = Category::all();
+        $sizes = Size::all();
+        $colors = Color::all();
+        return view('admin.products.create', ['categories' => $categories, 'sizes' => $sizes, 'colors' => $colors]);
     }
 
     /**
@@ -37,8 +48,28 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        Product::create($data);
+        $product = Product::create($request->get('product'));
+
+        $categories = $request->get('categories');
+        $productCategoryArr = [];
+        foreach($categories as $category) {
+            array_push($productCategoryArr, ['product_id' => $product->id, 'category_id' => $category]);
+        }
+        DB::table('product_category')->insert($productCategoryArr);
+        
+        $data = $request->get('attr');
+        $attrArray = [];
+        $numOfVariants = count($data) / 4;
+        for($i = 0; $i < $numOfVariants; $i++) {
+            array_push($attrArray, [
+                'product_id' => $product->id,
+                'size_id' => $data[4*$i], 
+                'color_id' => $data[4*$i+1], 
+                'buying_price' => $data[4*$i+2], 
+                'selling_price' => $data[4*$i+3]
+            ]);
+        }
+        DB::table('stock')->insert($attrArray);
         return redirect('/admin/products');
     }
 
@@ -63,6 +94,20 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::findOrFail($id);
+        $attributes = DB::table('stock')
+            ->leftjoin('sizes', 'size.id', '=', 'stock.size_id')
+            ->leftjoin('colors', 'color.id', '=', 'stock.color_id')
+            ->where('product_id', '=', $id)
+            ->select(DB::raw(`
+                sizes.name as size,
+                colors.name as color,
+                buying_price,
+                selling_price
+            `))
+            ->get();
+        
+        $product->attributes = $attributes;
+            
         return view('admin.products.edit', ['product' => $product]);
     }
 

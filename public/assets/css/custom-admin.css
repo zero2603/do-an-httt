@@ -1,0 +1,21 @@
+.remove-attr-btn {
+    border: none;
+    background: none;
+}
+
+.float-left {
+    float: left!important;
+}
+
+.float-right {
+    float: right!important;
+}
+
+#attribute_list {
+    clear: both;
+    margin-top: 85px; 
+}
+
+.attribute_input_group {
+    margin-bottom: 10px;
+}

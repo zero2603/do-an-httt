@@ -7,6 +7,8 @@ use \App\Product;
 use \App\Size;
 use \App\Color;
 use \App\Category;
+use \App\ProductCategory;
+use \App\Stock;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
@@ -55,7 +57,8 @@ class ProductController extends Controller
         foreach($categories as $category) {
             array_push($productCategoryArr, ['product_id' => $product->id, 'category_id' => $category]);
         }
-        DB::table('product_category')->insert($productCategoryArr);
+        print_r($productCategoryArr);
+        ProductCategory::insert($productCategoryArr);
         
         $data = $request->get('attr');
         $attrArray = [];
@@ -69,7 +72,7 @@ class ProductController extends Controller
                 'selling_price' => $data[4*$i+3]
             ]);
         }
-        DB::table('stock')->insert($attrArray);
+        Stock::insert($attrArray);
         return redirect('/admin/products');
     }
 
@@ -93,22 +96,29 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
+        $categories = Category::all();
+        $sizes = Size::all();
+        $colors = Color::all();
+
         $product = Product::findOrFail($id);
-        $attributes = DB::table('stock')
-            ->leftjoin('sizes', 'size.id', '=', 'stock.size_id')
-            ->leftjoin('colors', 'color.id', '=', 'stock.color_id')
-            ->where('product_id', '=', $id)
-            ->select(DB::raw(`
-                sizes.name as size,
-                colors.name as color,
-                buying_price,
-                selling_price
-            `))
-            ->get();
+
+        $productCategories = ProductCategory::where('product_id', '=', $id)->get();
+        $temp = [];
+        foreach($productCategories as $item) {
+            array_push($temp, $item->category_id);
+        }
+        $product->categories = $temp;
+
+        $attributes = Stock::where('product_id', '=', $id)->get();
         
         $product->attributes = $attributes;
             
-        return view('admin.products.edit', ['product' => $product]);
+        return view('admin.products.edit', [
+            'product' => $product, 
+            'categories' => $categories, 
+            'sizes' => $sizes,
+            'colors' => $colors    
+        ]);
     }
 
     /**
@@ -121,13 +131,36 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $product = Product::find($id);
-        $data = request()->except(['_token', '_method']);
+        $data = $request->get('product');
 
         foreach($data as $key => $value) {
             $product->$key = $value;
         }
         $product->save();
-        return redirect('admin/products');
+
+        $categories = $request->get('categories');
+        $productCategoryArr = [];
+        foreach($categories as $category) {
+            array_push($productCategoryArr, ['product_id' => $id, 'category_id' => $category]);
+        }
+        ProductCategory::where('product_id', '=', $id)->delete();
+        ProductCategory::insert($productCategoryArr);
+        
+        $data = $request->get('attr') ? $request->get('attr') : [];
+        $attrArray = [];
+        $numOfVariants = count($data) / 4;
+        for($i = 0; $i < $numOfVariants; $i++) {
+            array_push($attrArray, [
+                'product_id' => $id,
+                'size_id' => $data[4*$i], 
+                'color_id' => $data[4*$i+1], 
+                'buying_price' => $data[4*$i+2], 
+                'selling_price' => $data[4*$i+3]
+            ]);
+        }
+        Stock::where('product_id', '=', $id)->delete();
+        Stock::insert($attrArray);
+        return redirect('/admin/products');
     }
 
     /**
@@ -140,6 +173,8 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         $product->delete();
+        DB::table('product_category')->where('product_id', '=', $id)->delete();
+        DB::table('stock')->where('product_id', '=', $id)->delete();
         return redirect('admin/products');
     }
 }

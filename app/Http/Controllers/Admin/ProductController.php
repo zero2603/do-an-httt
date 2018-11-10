@@ -11,6 +11,7 @@ use \App\ProductCategory;
 use \App\Stock;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -73,6 +74,22 @@ class ProductController extends Controller
             ]);
         }
         Stock::insert($attrArray);
+
+        $imageArray = [];
+        $images = $request->images ? $request->images : [];
+       
+        foreach($images as $image)  {
+            // $extension = $image->getClientOriginalExtension();
+            $file = Storage::disk('local')->put('public/images', $image);
+            $filename = basename($file);
+
+            array_push($imageArray, [
+                'product_id' => $product->id,
+                'source' => 'storage/images/'.baseName($file)
+            ]);
+        }
+        DB::table('product_images')->insert($imageArray);
+
         return redirect('/admin/products');
     }
 
@@ -110,8 +127,10 @@ class ProductController extends Controller
         $product->categories = $temp;
 
         $attributes = Stock::where('product_id', '=', $id)->get();
-        
         $product->attributes = $attributes;
+
+        $images = DB::table('product_images')->where('product_id', '=', $id)->get();
+        $product->images = $images;
             
         return view('admin.products.edit', [
             'product' => $product, 
@@ -176,5 +195,33 @@ class ProductController extends Controller
         DB::table('product_category')->where('product_id', '=', $id)->delete();
         DB::table('stock')->where('product_id', '=', $id)->delete();
         return redirect('admin/products');
+    }
+
+    /**
+     *  Add product image 
+     */
+    public function addImage(Request $requet, $id) {
+        $imageArray = [];
+        $images = $request->images ? $request->images : [];
+       
+        foreach($images as $image)  {
+            // $extension = $image->getClientOriginalExtension();
+            $file = Storage::disk('local')->put('public/images', $image);
+            $filename = basename($file);
+
+            array_push($imageArray, [
+                'product_id' => $id,
+                'source' => 'storage/images/'.baseName($file)
+            ]);
+        }
+        DB::table('product_images')->insert($imageArray);
+    }
+
+    /**
+     *  Remove product image 
+     */
+    public function removeImage($id) {
+        $image = DB::table('product_images')->find($id);
+        
     }
 }

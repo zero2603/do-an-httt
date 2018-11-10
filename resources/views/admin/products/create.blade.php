@@ -5,7 +5,7 @@
 <h1 class="page-header">{{__('Thêm sản phẩm')}}</h1>
 
 <div>
-        <form method="POST" action={{route('products.store')}}>
+        <form method="POST" action={{route('products.store')}} enctype="multipart/form-data">
             {{ csrf_field() }}
             <div class="form-group">
                 <label>Tên sản phẩm</label>
@@ -18,6 +18,10 @@
             <div class="form-group">
                 <label>Chiết khấu giảm giá</label>
                 <input type="text" class="form-control" name="product[discount]" />
+            </div>
+            <div>
+                <label>Hình ảnh sản phẩm</label>
+                <input type="file" class="form-control" name="images[]" multiple/>
             </div>
             
             <div class="form-group">

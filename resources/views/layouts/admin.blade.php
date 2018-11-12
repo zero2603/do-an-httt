@@ -8,6 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>SB Admin 2 - Bootstrap Admin Theme</title>
 
@@ -26,6 +28,9 @@
 
     <!-- Custom Fonts -->
     <link href="{{asset('assets/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
+
+    <!-- jQuery -->
+    <script src="{{asset('assets/js/jquery/jquery-2.2.4.min.js')}}" type="text/javascript"></script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -144,8 +149,7 @@
         <!-- /#page-wrapper -->
     </div>
 
-<!-- jQuery -->
-<script src="{{asset('assets/js/jquery/jquery-2.2.4.min.js')}}"></script>
+
 
 <!-- Bootstrap Core JavaScript -->
 <script src="{{asset('assets/js/bootstrap_v3.3.7.js')}}"></script>

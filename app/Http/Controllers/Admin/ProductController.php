@@ -17,7 +17,7 @@ class ProductController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('admin');
+        // $this->middleware('admin');
     }
     /**
      * Display a listing of the resource.
@@ -200,9 +200,10 @@ class ProductController extends Controller
     /**
      *  Add product image 
      */
-    public function addImage(Request $requet, $id) {
+    public function addImage(Request $request) {
         $imageArray = [];
-        $images = $request->images ? $request->images : [];
+        // $images = $request->hasFile('images') ? $request->file('images') : [];
+        $images = $request->file('images');
        
         foreach($images as $image)  {
             // $extension = $image->getClientOriginalExtension();
@@ -210,18 +211,31 @@ class ProductController extends Controller
             $filename = basename($file);
 
             array_push($imageArray, [
-                'product_id' => $id,
+                'product_id' => 1,
                 'source' => 'storage/images/'.baseName($file)
             ]);
         }
-        DB::table('product_images')->insert($imageArray);
+        // $result = DB::table('product_images')->insert($imageArray);
+        // if($result) {
+        //     return json_encode(true);
+        // } else {
+        //     return json_encode(false);
+        // }
+       print_r($images);
     }
 
     /**
      *  Remove product image 
      */
     public function removeImage($id) {
-        $image = DB::table('product_images')->find($id);
+        $query = DB::table('product_images')->where('id', '=', $id);
+        $image = $query->first();
         
+        if ($query->delete()) {
+            Storage::disk('local')->delete($image->source);
+            return json_encode(true);
+        } else {
+            return json_encode(false);
+        }
     }
 }

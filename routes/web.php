@@ -43,4 +43,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/admin/product-attribute/colors', 'Admin\AttributeController@addColor')->name('attributes.add_color');
     Route::delete('/admin/product-attribute/sizes/{id}', 'Admin\AttributeController@removeSize')->name('attributes.remove_size');
     Route::delete('/admin/product-attribute/colors/{id}', 'Admin\AttributeController@removeColor')->name('attributes.remove_color');
+
+    // product images
+    Route::post('/admin/product/images/upload', 'Admin\ProductController@addImage');
+    Route::delete('/admin/product/images/remove/{id}', 'Admin\ProductController@removeImage');
 });

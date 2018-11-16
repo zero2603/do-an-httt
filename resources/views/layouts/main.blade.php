@@ -16,6 +16,7 @@
 
     <!-- Core Style CSS -->
     <link rel="stylesheet" href="{{asset('../../assets/css/core-style.css')}}">
+    <link rel="stylesheet" href="{{asset('../../assets/css/custom-front.css')}}">
     <link rel="stylesheet" href="{{asset('../../assets/style.css')}}">
 
 </head>
@@ -107,7 +108,35 @@
                 </div>
                 <!-- User Login Info -->
                 <div class="user-login-info">
-                    <a href="#"><img src="../../assets/img/core-img/user.svg" alt=""></a>
+                    <a href="#" id="account-menu-icon"><img src="../../assets/img/core-img/user.svg" alt=""></a>
+                    <div class="d-none" id="account-menu">
+                        @guest
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Đăng nhập') }}</a>
+                            </li>
+                            <li class="nav-item">
+                                @if (Route::has('register'))
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Đăng ký') }}</a>
+                                @endif
+                            </li>
+                        @else
+                            <li>
+                                <a>Profile cá nhân</a>
+                            </li>
+                            <li>
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                    onclick="event.preventDefault();
+                                                  document.getElementById('logout-form').submit();">
+                                     {{ __('Đăng xuất') }}
+                                 </a>
+
+                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                     @csrf
+                                 </form>
+                            </li>
+                        
+                        @endguest
+                    </div>
                 </div>
                 <!-- Cart Area -->
                 <div class="cart-area">
@@ -302,6 +331,17 @@
     <script src="{{asset('../../assets/js/classy-nav.min.js')}}"></script>
     <!-- Active js -->
     <script src="{{asset('../../assets/js/active.js')}}"></script>
+
+    <script>
+        
+        var element = document.getElementById('account-menu-icon');
+        var menu = document.getElementById('account-menu');
+        
+        // element.onclick = function() {
+        //     menu.classList.remove("d-none");
+        // }
+        
+    </script>
 
 </body>
 

@@ -18,16 +18,14 @@ Route::get('/home', function () {
 });
 
 Auth::routes();
+Route::get('/products', 'ProductController@index');
+Route::get('/products/{id}', 'ProductController@show');
 
+
+// routes admin
 Route::get('/admin/login', 'Admin\Auth\LoginController@index');
 Route::post('/admin/login', 'Admin\Auth\LoginController@login')->name('admin_login');
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/products', 'ProductController@index');
-    Route::get('/products/{id}', 'ProductController@show');
-});
-
-// routes admin
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', function() {
         return view('layouts.admin');

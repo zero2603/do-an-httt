@@ -1,0 +1,22 @@
+#account-menu {
+    border: 1px solid #ebebeb;
+    z-index: 100;
+    position: absolute;
+    padding: 10px;
+    background: #ffffff;
+}
+
+#account-menu li {
+    list-style: none;
+    line-height: 50px;
+}
+
+.user-login-info #account-menu li a {
+    border: none;
+    line-height: 40px;
+    width: 130px;
+}
+
+/* .account-menu li div:hover {
+    color: #34495e;
+} */

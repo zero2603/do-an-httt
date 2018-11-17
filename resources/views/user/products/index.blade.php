@@ -172,13 +172,13 @@
 
                         @foreach($products as $product)
                         <!-- Single Product -->
-                        <div class="col-12 col-sm-6 col-lg-4">
+                        <div class="col-12 col-sm-6 col-lg-3">
                             <div class="single-product-wrapper">
                                 <!-- Product Image -->
                                 <div class="product-img">
-                                    <img src="https://img.promgirl.com/_img/PGPRODUCTS/1630625/500/navy-dress-DQ-9716-a.jpg" alt="">
+                                    <img src="assets/img/product-img/{{$product->image}}" alt="">
                                     <!-- Hover Thumb -->
-                                    <img class="hover-img" src="https://img.promgirl.com/_img/PGPRODUCTS/1477855/500/navy-dress-DQ-9247-a.jpg" alt="">
+                                    <img class="hover-img" src="" alt="">
 
                                     <!-- Favourite -->
                                     <div class="product-favourite">
@@ -188,10 +188,12 @@
 
                                 <!-- Product Description -->
                                 <div class="product-description">
-                                    <span>topshop</span>
-                                    <a href="/products/{{$product->id}}">
-                                        <h6>{{$product->product_name}}</h6>
-                                    </a>
+                                    <span>
+                                        <a href="/products/{{$product->id}}">
+                                            <h6>{{$product->product_name}}</h6>
+                                        </a>
+                                    </span>
+                                    <span><h6>{{$product->description}}</h6></span>
                                     <p class="product-price">{{$product->selling_price}} <span>VND</span></p>
 
                                     <!-- Hover Content -->

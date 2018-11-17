@@ -2,55 +2,59 @@
 
 @section('content')
 
-    <!-- ##### Single Product Details Area Start ##### -->
-    <section class="single_product_details_area d-flex align-items-center">
+    <div class="container">
+        <!-- ##### Single Product Details Area Start ##### -->
+        <section class="single_product_details_area d-flex align-items-center">
 
-        <!-- Single Product Thumb -->
-        <div class="single_product_thumb clearfix">
-            <div class="product_thumbnail_slides owl-carousel">
-                <img src="https://ae01.alicdn.com/kf/HTB1fX8qSpXXXXaOaXXXq6xXFXXXQ/European-station-Summer-dress-2018-Square-Collar-Dresses-show-women-s-printed-embroidery-Bohemian-dress-short.jpg_640x640q90.jpg" alt="">
-                <img src="http://sobre.jp/image/data/item/PC/image/185124-0077-1.jpg" alt="">
+            <!-- Single Product Thumb -->
+            <div class="single_product_thumb clearfix">
+                <div class="product_thumbnail_slides owl-carousel">
+                    <img src="../assets/img/product-img/{{$product->image}}" alt="">
+                    <img src="../assets/img/product-img/{{$product->image}}" alt="">
+                </div>
             </div>
-        </div>
 
-        <!-- Single Product Description -->
-        <div class="single_product_desc clearfix">
-            <span>mango</span>
-            <a href="#">
-                <h2>{{$product->product_name}}</h2>
-            </a>
-            <p class="product-price">{{$product->selling_proce}} VND</p>
-            <p class="product-desc">{!!$product->description!!}</p>
+            <!-- Single Product Description -->
+            <div class="single_product_desc clearfix">
+                <span></span>
+                <a href="#">
+                    <h2>{{$product->product_name}}</h2>
+                </a>
+                <p class="product-price">{{$product->selling_price}} VND</p>
+                <p class="product-desc">{!!$product->description!!}</p>
 
-            <!-- Form -->
-            <form class="cart-form clearfix" method="post">
-                <!-- Select Box -->
-                <div class="select-box d-flex mt-50 mb-30">
-                    <select name="select" id="productSize" class="mr-5">
-                        <option value="value">Size: XL</option>
-                        <option value="value">Size: X</option>
-                        <option value="value">Size: M</option>
-                        <option value="value">Size: S</option>
-                    </select>
-                    <select name="select" id="productColor">
-                        <option value="value">Color: Black</option>
-                        <option value="value">Color: White</option>
-                        <option value="value">Color: Red</option>
-                        <option value="value">Color: Purple</option>
-                    </select>
-                </div>
-                <!-- Cart & Favourite Box -->
-                <div class="cart-fav-box d-flex align-items-center">
-                    <!-- Cart -->
-                    <button type="submit" name="addtocart" value="5" class="btn essence-btn">Add to cart</button>
-                    <!-- Favourite -->
-                    <div class="product-favourite ml-4">
-                        <a href="#" class="favme fa fa-heart"></a>
+                <!-- Form -->
+                <form class="cart-form clearfix" method="post">
+                    <!-- Select Box -->
+                    <div class="select-box d-flex mt-50 mb-30">
+                        <select name="select" id="productSize" class="mr-5">
+                            <?php
+                                for ($i = 0; $i < count($product->size); $i++) {
+                                    echo "<option value='value'>Size: ".$product->size[$i]."</option>";
+                                }
+                            ?>
+                        </select>
+                        <select name="select" id="productColor">
+                            <?php
+                                for ($j = 0; $j < count($product->color); $j++) {
+                                    echo "<option value='value'>Size: ".$product->color[$j]."</option>";
+                                }
+                            ?>
+                        </select>
                     </div>
-                </div>
-            </form>
-        </div>
-    </section>
-    <!-- ##### Single Product Details Area End ##### -->
+                    <!-- Cart & Favourite Box -->
+                    <div class="cart-fav-box d-flex align-items-center">
+                        <!-- Cart -->
+                        <button type="submit" name="addtocart" value="5" class="btn essence-btn">Add to cart</button>
+                        <!-- Favourite -->
+                        <div class="product-favourite ml-4">
+                            <a href="#" class="favme fa fa-heart"></a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+        <!-- ##### Single Product Details Area End ##### -->
+    </div>
 
 @endsection

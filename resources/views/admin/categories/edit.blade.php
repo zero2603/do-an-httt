@@ -15,9 +15,9 @@
             <div class="form-group">
                 <label>Danh mục cha</label>
                 <select class="form-control" name="parent_id">
-                    <option value={{NULL}} {{$category->parent_id == NULL ? 'selected' : ''}}>-- Không có --</option>
+                    <option value="{{NULL}}" {{$category->parent_id == NULL ? 'selected' : ''}}>-- Không có --</option>
                     @foreach ($categories as $item)
-                        <option value={{$item->id}} {{$category->parent_id == $item->id ? 'selected' : ''}}>
+                        <option value="{{$item->id}}" {{$category->parent_id == $item->id ? 'selected' : ''}}>
                             {{$item->name}}
                         </option>
                     @endforeach

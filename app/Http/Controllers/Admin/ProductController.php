@@ -8,6 +8,7 @@ use \App\Size;
 use \App\Color;
 use \App\Category;
 use \App\ProductCategory;
+use \App\ProductImage;
 use \App\Stock;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -81,7 +82,6 @@ class ProductController extends Controller
         foreach($images as $image)  {
             // $extension = $image->getClientOriginalExtension();
             $file = Storage::disk('local')->put('public/images', $image);
-            $filename = basename($file);
 
             array_push($imageArray, [
                 'product_id' => $product->id,
@@ -202,26 +202,21 @@ class ProductController extends Controller
      */
     public function addImage(Request $request) {
         $imageArray = [];
-        // $images = $request->hasFile('images') ? $request->file('images') : [];
-        $images = $request->file('images');
+        $product_id = $request->get('product_id');
+        $images = $request->images ? $request->images : [];
        
         foreach($images as $image)  {
             // $extension = $image->getClientOriginalExtension();
             $file = Storage::disk('local')->put('public/images', $image);
-            $filename = basename($file);
 
-            array_push($imageArray, [
-                'product_id' => 1,
-                'source' => 'storage/images/'.baseName($file)
-            ]);
+            $newImage = new ProductImage;
+            $newImage->product_id = $product_id;
+            $newImage->source = 'storage/images/'.baseName($file);
+            $newImage->save();
+            array_push($imageArray, $newImage);
         }
         // $result = DB::table('product_images')->insert($imageArray);
-        // if($result) {
-        //     return json_encode(true);
-        // } else {
-        //     return json_encode(false);
-        // }
-       print_r($images);
+        return redirect()->back();
     }
 
     /**

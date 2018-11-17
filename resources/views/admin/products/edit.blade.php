@@ -5,6 +5,27 @@
 <h1 class="page-header">{{__('Sửa sản phẩm')}}</h1>
 
 <div>
+        <h4>Hình ảnh sản phẩm</h4>
+        <div class="row" id="list-images">
+        @foreach ($product->images as $item)
+            <div class="col-md-3 product-images">
+                <img src="{{url('').'/'.$item->source}}"/>
+                <i class="fa fa-times fa-3x remove-image-button" id={{$item->id}}></i>
+            </div>
+        @endforeach
+            <div class="col-md-3 product-images">
+                <form id="form-add-image" action="{{url('/admin/product/images/upload')}}" method="post" enctype="multipart/form-data" onsubmit="return false">
+                    {{ csrf_field() }}
+                    <label id="add-image-button">
+                        <i class="fa fa-plus fa-4x"></i>
+                        <input type="file" class="d-none" id="input-add-image" name="images[]" multiple/>
+                    </label>
+                    <input type="text" class="d-none" name="product_id" value="{{$product->id}}" />
+                </form>
+            </div>
+        </div>
+        <hr/>
+        <h4>Chi tiết sản phẩm</h4>
         <form method="POST" action={{route('products.update', $product->id)}}>
             @method('PUT')
             {{ csrf_field() }}
@@ -21,22 +42,6 @@
                 <input type="text" class="form-control" name="product[discount]" value="{{$product->discount}}" />
             </div>
 
-            <hr/>
-            <h4>Hình ảnh sản phẩm</h4>
-            <div class="row">
-            @foreach ($product->images as $item)
-                <div class="col-md-3 product-images">
-                    <img src="{{url('').'/'.$item->source}}"/>
-                    <i class="fa fa-times fa-3x remove-image-button" id={{$item->id}}></i>
-                </div>
-            @endforeach
-                <div class="col-md-3 product-images">
-                    <label id="add-image-button">
-                        <i class="fa fa-plus fa-4x"></i>
-                        <input type="file" class="d-none" id="input-add-image"/>
-                    </label>
-                </div>
-            </div>
             <hr/>
 
             <div class="form-group">
@@ -205,27 +210,10 @@
 
     $('#add-image-button').on('change', function(e){
         e.preventDefault();
-        let parent = $(this).parent();
 
-        var form_data = new FormData();
-        form_data.append('images', $('#input-add-image').prop('files'));
-
-        $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            type : 'POST',
-            contentType : false,
-            processData : false,
-            cache       : false,
-            url : `/admin/product/images/upload`,
-            data: form_data,
-
-            success : function(response){
-                if(response){
-                    console.log(response);
-                }
-            }.bind(this)
+        document.getElementById('form-add-image').submit(function(e) {
+            e.preventDefault();
+            console.log('aaaaaaaaaaa');
         })
     });
 </script>

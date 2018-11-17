@@ -70,7 +70,16 @@
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();">
+                                <i class="fa fa-sign-out fa-fw"></i> {{ __('Logout') }}
+                            </a>
+
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -100,14 +109,14 @@
                             <a href="/admin/users"><i class="fa fa-users fa-fw"></i> Người dùng</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Sản phẩm<span class="fa arrow"></span></a>
+                            <a href="/admin/products"><i class="fa fa-shopping-cart fa-fw"></i> Sản phẩm</a>
+                        </li>
+                        <li>
+                            <a href="/admin/categories"><i class="fa fa-tag fa-fw"></i> Danh mục sản phẩm</a>
+                        </li> 
+                        <li>
+                            <a href="#"><i class="fa fa-info fa-fw"></i> Thuộc tính sản phẩm<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="/admin/products/create"> Thêm sản phẩm</a>
-                                </li>
-                                <li>
-                                    <a href="/admin/products"> Tất cả sản phẩm</a> 
-                                </li>
                                 <li>
                                     <a href="/admin/product-attribute/sizes"> Thuộc tính sản phẩm - Size</a> 
                                 </li>
@@ -116,19 +125,7 @@
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Danh mục sản phẩm<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="/admin/categories/create"> Thêm danh mục</a>
-                                </li>
-                                <li>
-                                    <a href="/admin/categories"> Tất cả danh mục</a> 
-                                </li>
-                            </ul>
-                                <!-- /.nav-second-level -->
-                        </li>                        
+                        </li>                
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->

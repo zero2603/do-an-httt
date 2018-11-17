@@ -26,7 +26,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.users.create');
+
     }
 
     /**
@@ -37,9 +37,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        User::create($data);
-        return redirect('/admin/users');
+        
     }
 
     /**
@@ -50,8 +48,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::findOrFail($id);
-        return view('admin.users.edit', ['user' => $user]);
+       
     }
 
     /**

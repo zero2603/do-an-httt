@@ -17,6 +17,7 @@
     width: 130px;
 }
 
-/* .account-menu li div:hover {
-    color: #34495e;
-} */
+.single-product-wrapper .product-img img {
+    height: 254px;
+    object-fit: cover;
+}

@@ -169,14 +169,17 @@
                     </div>
 
                     <div class="row">
-
                         @foreach($products as $product)
                         <!-- Single Product -->
-                        <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="col-12 col-sm-6 col-lg-4">
                             <div class="single-product-wrapper">
                                 <!-- Product Image -->
                                 <div class="product-img">
-                                    <img src="assets/img/product-img/{{$product->image}}" alt="">
+                                    @if($product->image)
+                                    <img src="{{$product->image}}" alt="">
+                                    @else
+                                    <img src="https://static.umotive.com/img/product_image_thumbnail_placeholder.png" alt="">
+                                    @endif
                                     <!-- Hover Thumb -->
                                     <img class="hover-img" src="" alt="">
 
@@ -193,7 +196,6 @@
                                             <h6>{{$product->product_name}}</h6>
                                         </a>
                                     </span>
-                                    <span><h6>{{$product->description}}</h6></span>
                                     <p class="product-price">{{$product->selling_price}} <span>VND</span></p>
 
                                     <!-- Hover Content -->

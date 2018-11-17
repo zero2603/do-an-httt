@@ -17,7 +17,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products =  Product::paginate(8);
+        $products =  Product::orderBy('id', 'DESC')->paginate(9);
         foreach($products as $product) {
             $attribute = Stock::where('product_id', '=', $product->id)->orderBy('selling_price', 'ASC')->first();
             $product->attribute = $attribute;

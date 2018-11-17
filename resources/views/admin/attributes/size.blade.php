@@ -8,7 +8,7 @@
         {{ csrf_field() }}
         <div class="form-group row">
             <div class="col-md-3">
-                <input type="text" placeholder="Tên size" name="name" class="form-control"/>
+                <input type="text" placeholder="Tên size" name="name" class="form-control" required/>
             </div>
             <div class="col-md-1">
                 <button type="submit" class="btn btn-primary">Submit</button>

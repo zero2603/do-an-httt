@@ -20,7 +20,7 @@ Route::get('/home', function () {
 Auth::routes();
 Route::get('/products', 'ProductController@index');
 Route::get('/products/{id}', 'ProductController@show');
-
+Route::get('/getPrice','ProductController@getPriceWhenChanging');
 
 // routes admin
 Route::get('/admin/login', 'Admin\Auth\LoginController@index');

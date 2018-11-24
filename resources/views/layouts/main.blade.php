@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="{{asset('../../assets/css/core-style.css')}}">
     <link rel="stylesheet" href="{{asset('../../assets/css/custom-front.css')}}">
     <link rel="stylesheet" href="{{asset('../../assets/style.css')}}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 </head>
 

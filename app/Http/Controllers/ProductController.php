@@ -17,7 +17,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products =  Product::orderBy('id', 'DESC')->paginate(9);
+        $products =  Product::paginate(8);
         foreach($products as $product) {
             $attribute = Stock::where('product_id', '=', $product->id)->orderBy('selling_price', 'ASC')->first();
             $product->attribute = $attribute;
@@ -72,7 +72,18 @@ class ProductController extends Controller
         $selling_price = DB::table('stock')->where('product_id', '=', $id)->value('selling_price');
         $product->selling_price = $selling_price;
 
-            
+        // print_r($product->id);die(); 
         return view('user.products.detail', ['product' => $product]);
+    }
+
+    function getPriceWhenChanging() {
+        
+        if(isset($_GET['color']) && isset($_GET['size']) && isset($_GET['id'])) {
+            $size_id = DB::table('sizes')->where('name', '=', $_GET['size'])->value('id');
+            $color_id = DB::table('colors')->where('name', '=', $_GET['color'])->value('id');
+            $selling_price = DB::table('stock')->where('product_id', '=', $_GET['id'])->where('color_id', '=', $color_id)->where('size_id', '=', $size_id )->value('selling_price');
+            return $selling_price;
+        }
+        
     }
 }

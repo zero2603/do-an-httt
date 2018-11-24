@@ -24,17 +24,17 @@
                 <p class="product-desc">{!!$product->description!!}</p>
 
                 <!-- Form -->
-                <form class="cart-form clearfix" method="post" name="formProduct">
+                <form class="cart-form clearfix" method="post" name="formProduct" >
                     <!-- Select Box -->
                     <div class="select-box d-flex mt-50 mb-30">
-                        <select name="productSize" id="productSize" class="mr-5" onchange="notify(window.document.formProduct.productSize.value);">
+                        <select name="productSize" id="productSize" class="mr-5" onchange="notify('size');">
                             <?php
                                 for ($i = 0; $i < count($product->size); $i++) {
                                     echo "<option value='".$product->size[$i]."'>Size: ".$product->size[$i]."</option>";
                                 }
                             ?>
                         </select>
-                        <select name="productColor" id="productColor" onchange="notify(window.document.formProduct.productColor.value);">
+                        <select name="productColor" id="productColor" onchange="notify('color');">
                             <?php
                                 for ($j = 0; $j < count($product->color); $j++) {
                                     echo "<option value='".$product->color[$j]."'>Color: ".$product->color[$j]."</option>";
@@ -45,7 +45,7 @@
                     <!-- Cart & Favourite Box -->
                     <div class="cart-fav-box d-flex align-items-center">
                         <!-- Cart -->
-                        <button type="submit" name="addtocart" value="5" class="btn essence-btn">Add to cart</button>
+                        <button type="submit" name="addtocart"  class="btn essence-btn" id="addToCart">Add to cart</button>
                         <!-- Favourite -->
                         <div class="product-favourite ml-4">
                             <a href="#" class="favme fa fa-heart"></a>
@@ -58,28 +58,37 @@
         <!-- ##### Single Product Details Area End ##### -->
     </div>
     <script>
-        function notify(attribute) {
+        function notify(itemchanging) {
             <?php
             use Illuminate\Support\Facades\URL;
             $url = url('/')."/products/ajaxDetail";
             ?>
             var productId = <?php echo $product->id; ?>;
-            var color = window.document.formProduct.productColor.value;
-            var size = window.document.formProduct.productSize.value;
+            var color = window.document.getElementById('productColor').value;
+            var size = window.document.getElementById('productSize').value;
             $(document).ready(function(){
                 $.ajax({
                     url:"/getPrice",
                     method:"GET",
                     async:true,
-                    data:{color: color, size: size, id: productId},
+                    data:{color: color, size: size, id: productId, itemchanging: itemchanging },
                     success: function(response) {
-                        if(response != 0) {
-                            $('#productPrice').empty().html(response+ " VND");
+                        if(response.selling_price != null) {
+                            document.getElementById("addToCart").disabled = false;
+                            $('#productPrice').empty().html(response.selling_price+ " VND");
                             $('#alert').empty();
+                            if(response.color && response.color != null) {
+                                var rewrite ='';
+                                for(var i = 0; i < (response.color).length; i++ ) {
+                                    rewrite+= "<option value='"+response.color[i]+"'>Color: "+response.color[i]+"</option>";
+                                }
+                                $('#productColor').empty().html(rewrite);
+                            }
                         } else {
-                            var message = 'Sorry, '+'<?php echo $product->product_name;?>'+'are no available with size '+size+' and color '+color;
-                            $('#alert').empty().html(message);
-                        }
+                            var message = "<?php echo $product->product_name; ?>"+" are no available with size "+size+" and color "+color;
+                            $('#alert').html(message);
+                            document.getElementById("addToCart").disabled = true;
+                        } 
                         
 
                     }

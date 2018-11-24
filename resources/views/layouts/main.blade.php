@@ -109,7 +109,7 @@
                 </div>
                 <!-- User Login Info -->
                 <div class="user-login-info">
-                    <a href="#" id="account-menu-icon"><img src="../../assets/img/core-img/user.svg" alt=""></a>
+                    <a href="/user" id="account-menu-icon"><img src="../../assets/img/core-img/user.svg" alt=""></a>
                     <div class="d-none" id="account-menu">
                         @guest
                             <li class="nav-item">
@@ -231,6 +231,7 @@
     <!-- ##### Right Side Cart End ##### -->
 
     @yield('content')
+    @yield('content-profile')
 
     <!-- ##### Footer Area Start ##### -->
     <footer class="footer_area clearfix">

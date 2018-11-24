@@ -16,11 +16,14 @@ Route::get('/', 'ProductController@index');
 Route::get('/home', function () {
     return view('home');
 });
+Route::get('/user/profile', function () {
+    return view('user.profile');
+});
 
 Auth::routes();
 Route::get('/products', 'ProductController@index');
 Route::get('/products/{id}', 'ProductController@show');
-Route::get('/getPrice','ProductController@getPriceWhenChanging');
+Route::get('/getPrice','ProductController@getInfoWhenChange');
 
 // routes admin
 Route::get('/admin/login', 'Admin\Auth\LoginController@index');

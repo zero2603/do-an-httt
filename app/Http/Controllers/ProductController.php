@@ -61,13 +61,13 @@ class ProductController extends Controller
         $product->size = array_unique($size);
         $product->size = array_values($product->size);
 
-        $color_id = DB::table('stock')->where('product_id', '=', $id)->get();
+        $color_id = DB::table('stock')->where('product_id', '=', $id)->where('size_id', '=', $size_id[0]->size_id)->get();
         foreach ($color_id as $item) {
             $color[] = DB::table('colors')->where('id', '=', $item->color_id)->value('name');
         }
         $product->color = array_unique($color);
         $product->color = array_values($product->color);
-        // print_r($product->color);die();
+        
         
         $selling_price = DB::table('stock')->where('product_id', '=', $id)->value('selling_price');
         $product->selling_price = $selling_price;
@@ -76,14 +76,34 @@ class ProductController extends Controller
         return view('user.products.detail', ['product' => $product]);
     }
 
-    function getPriceWhenChanging() {
-        
+    function getInfoWhenChange() {
+        $size_id = DB::table('sizes')->where('name', '=', $_GET['size'])->value('id');
         if(isset($_GET['color']) && isset($_GET['size']) && isset($_GET['id'])) {
-            $size_id = DB::table('sizes')->where('name', '=', $_GET['size'])->value('id');
-            $color_id = DB::table('colors')->where('name', '=', $_GET['color'])->value('id');
-            $selling_price = DB::table('stock')->where('product_id', '=', $_GET['id'])->where('color_id', '=', $color_id)->where('size_id', '=', $size_id )->value('selling_price');
-            return $selling_price;
+            
+            if(isset($_GET['itemchanging']) && $_GET['itemchanging'] == 'size') {
+
+                $color_id = DB::table('stock')->where('product_id', '=', $_GET['id'])->where('size_id', '=', $size_id)->get();
+                foreach ($color_id as $item) {
+                    $color[] = DB::table('colors')->where('id', '=', $item->color_id)->value('name');
+                }
+                $color = array_unique($color);
+                $color = array_values($color);
+                $selling_price = DB::table('stock')->where('product_id', '=', $_GET['id'])->where('color_id', '=', $color_id[0]->color_id)->where('size_id', '=', $size_id )->value('selling_price');
+                $response = [
+                    'color' => $color,
+                    'selling_price' => $selling_price
+                ];
+                return $response;
+
+            } else {
+                $color_id = DB::table('colors')->where('name', '=', $_GET['color'])->value('id');
+                $selling_price = DB::table('stock')->where('product_id', '=', $_GET['id'])->where('color_id', '=', $color_id)->where('size_id', '=', $size_id )->value('selling_price');
+                $response = [
+                    'selling_price' => $selling_price
+                ];
+                return $response;
+            }
+            
         }
-        
     }
 }

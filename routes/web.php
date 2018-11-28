@@ -11,6 +11,8 @@
 |
 */
 
+// routes guest
+
 Route::get('/', 'ProductController@index');
 
 Route::get('/home', function () {
@@ -23,7 +25,16 @@ Route::get('/user/profile', function () {
 Auth::routes();
 Route::get('/products', 'ProductController@index');
 Route::get('/products/{id}', 'ProductController@show');
-Route::get('/getPrice','ProductController@getInfoWhenChange');
+Route::get('/product/colors','ProductController@getColors');
+Route::get('/product/price','ProductController@getPrice');
+
+// routes user
+Route::middleware(['auth'])->group(function () {
+    Route::get('/cart','CartController@getCart');
+    Route::post('/cart','CartController@add');
+    Route::post('/cart/change', 'CartController@changeQuantity');
+    Route::delete('/cart/remove', 'CartController@remove');
+});
 
 // routes admin
 Route::get('/admin/login', 'Admin\Auth\LoginController@index');

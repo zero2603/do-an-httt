@@ -199,12 +199,12 @@
                                     <p class="product-price">{{$product->selling_price}} <span>VND</span></p>
 
                                     <!-- Hover Content -->
-                                    <div class="hover-content">
+                                    {{-- <div class="hover-content">
                                         <!-- Add to Cart -->
                                         <div class="add-to-cart-btn">
                                             <a href="#" class="btn essence-btn">Add to Cart</a>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>

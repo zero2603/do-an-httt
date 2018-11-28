@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="">
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
@@ -18,7 +20,10 @@
     <link rel="stylesheet" href="{{asset('../../assets/css/core-style.css')}}">
     <link rel="stylesheet" href="{{asset('../../assets/css/custom-front.css')}}">
     <link rel="stylesheet" href="{{asset('../../assets/style.css')}}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- jQuery (Necessary for All JavaScript Plugins) -->
+    <script src="{{asset('../../assets/js/jquery/jquery-2.2.4.min.js')}}"></script>
+    {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> --}}
 
 </head>
 
@@ -141,7 +146,10 @@
                 </div>
                 <!-- Cart Area -->
                 <div class="cart-area">
-                    <a href="#" id="essenceCartBtn"><img src="../../assets/img/core-img/bag.svg" alt=""> <span>3</span></a>
+                    <a href="#" id="essenceCartBtn">
+                        <img src="../../assets/img/core-img/bag.svg" alt=""> 
+                        <span class="cart-items-number"></span>
+                    </a>
                 </div>
             </div>
 
@@ -156,60 +164,16 @@
 
         <!-- Cart Button -->
         <div class="cart-button">
-            <a href="#" id="rightSideCart"><img src="../../assets/img/core-img/bag.svg" alt=""> <span>3</span></a>
+            <a href="#" id="rightSideCart">
+                <img src="../../assets/img/core-img/bag.svg" alt=""> 
+                <span class="cart-items-number"></span>
+            </a>
         </div>
 
         <div class="cart-content d-flex">
 
             <!-- Cart List Area -->
-            <div class="cart-list">
-                <!-- Single Cart Item -->
-                <div class="single-cart-item">
-                    <a href="#" class="product-image">
-                        <img src="../../assets/img/product-img/product-1.jpg" class="cart-thumb" alt="">
-                        <!-- Cart Item Desc -->
-                        <div class="cart-item-desc">
-                            <span class="product-remove"><i class="fa fa-close" aria-hidden="true"></i></span>
-                            <span class="badge">Mango</span>
-                            <h6>Button Through Strap Mini Dress</h6>
-                            <p class="size">Size: S</p>
-                            <p class="color">Color: Red</p>
-                            <p class="price">$45.00</p>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Single Cart Item -->
-                <div class="single-cart-item">
-                    <a href="#" class="product-image">
-                        <img src="../../assets/img/product-img/product-2.jpg" class="cart-thumb" alt="">
-                        <!-- Cart Item Desc -->
-                        <div class="cart-item-desc">
-                            <span class="product-remove"><i class="fa fa-close" aria-hidden="true"></i></span>
-                            <span class="badge">Mango</span>
-                            <h6>Button Through Strap Mini Dress</h6>
-                            <p class="size">Size: S</p>
-                            <p class="color">Color: Red</p>
-                            <p class="price">$45.00</p>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Single Cart Item -->
-                <div class="single-cart-item">
-                    <a href="#" class="product-image">
-                        <img src="../../assets/img/product-img/product-3.jpg" class="cart-thumb" alt="">
-                        <!-- Cart Item Desc -->
-                        <div class="cart-item-desc">
-                            <span class="product-remove"><i class="fa fa-close" aria-hidden="true"></i></span>
-                            <span class="badge">Mango</span>
-                            <h6>Button Through Strap Mini Dress</h6>
-                            <p class="size">Size: S</p>
-                            <p class="color">Color: Red</p>
-                            <p class="price">$45.00</p>
-                        </div>
-                    </a>
-                </div>
+            <div class="cart-list" id="cart-list-items">
             </div>
 
             <!-- Cart Summary -->
@@ -321,14 +285,13 @@
     </footer>
     <!-- ##### Footer Area End ##### -->
 
-    <!-- jQuery (Necessary for All JavaScript Plugins) -->
-    <script src="{{asset('../../assets/js/jquery/jquery-2.2.4.min.js')}}"></script>
+    
     <!-- Popper js -->
     <script src="{{asset('../../assets/js/popper.min.js')}}"></script>
     <!-- Bootstrap js -->
     <script src="{{asset('../../assets/js/bootstrap.min.js')}}"></script>
     <!-- Plugins js -->
-    <script src="{{asset('../../assets/js/plugins.js')}}"></script>
+    {{-- <script src="{{asset('../../assets/js/plugins.js')}}"></script> --}}
     <!-- Classy Nav js -->
     <script src="{{asset('../../assets/js/classy-nav.min.js')}}"></script>
     <!-- Active js -->
@@ -338,10 +301,82 @@
         
         var element = document.getElementById('account-menu-icon');
         var menu = document.getElementById('account-menu');
-        
-        // element.onclick = function() {
-        //     menu.classList.remove("d-none");
-        // }
+        var cart = document.getElementById("cart-list-items");
+
+        var cartIcons = document.getElementsByClassName("cart-items-number");
+
+        $(document).ready(function(){
+            $.ajax({
+                url: '/cart',
+                type: "GET",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success : function(response){
+
+                    Array.prototype.forEach.call(cartIcons, function(item) {
+                        item.innerHTML = response.cart.length;
+                    });
+
+                    var items = [];
+                    response.cart.forEach(item => {
+                        let temp = document.createElement("div");
+                        temp.className = "single-cart-item";
+                        temp.innerHTML =
+                            '<a href="#" class="product-image">\
+                                <img src=' + item.product_image + ' class="cart-thumb" alt="">\
+                                <div class="cart-item-desc">\
+                                    <span class="product-remove"><i class="fa fa-close" aria-hidden="true"></i></span>\
+                                    <h6>'+ item.product_name + '</h6>\
+                                    <p class="size">Size: ' + item.size_name + '</p>\
+                                    <p class="color">Color: ' + item.color_name  + '</p>\
+                                    <div>\
+                                        <span class="price">$' + item.selling_price + '</span>\
+                                        <span class="price"> x </span>\
+                                        <span class="price" id="stock-'+ item.stock_id +'-quantity">' + item.quantity + '</span>\
+                                        <span class="ml-4">\
+                                            <button class="change-quantity-btn" onclick="plus('+ item.stock_id + ');">+</button>\
+                                        </span>\
+                                        <span>\
+                                            <button class="change-quantity-btn" onclick="minus(' + item.stock_id + ');">-</button>\
+                                        </span>\
+                                    </div>\
+                                </div>\
+                            </a>';
+                        cart.appendChild(temp);      
+                    })
+                }
+            })
+        });
+
+        function plus(stock_id) {
+            $.ajax({
+                url: "/cart/change",
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: { stock_id: stock_id, type: "plus" },
+                success: function(response) {
+                   document.getElementById("stock-"+stock_id+"-quantity").innerHTML = response.item.quantity; 
+                }
+            })
+        }
+
+        function minus(stock_id) {
+            $.ajax({
+                url: "/cart/change",
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: { stock_id: stock_id, type: "minus" },
+                success: function(response) {
+                    console.log(response);
+                    document.getElementById("stock-"+stock_id+"-quantity").innerHTML = response.item.quantity;
+                }
+            })
+        }
         
     </script>
 

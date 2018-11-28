@@ -1,7 +1,6 @@
 @extends('layouts.main')
 
 @section('content')
-
     <div class="container">
         <!-- ##### Single Product Details Area Start ##### -->
         <section class="single_product_details_area d-flex align-items-center">
@@ -9,8 +8,9 @@
             <!-- Single Product Thumb -->
             <div class="single_product_thumb clearfix">
                 <div class="product_thumbnail_slides owl-carousel">
-                    <img src="../assets/img/product-img/{{$product->image}}" alt="">
-                    <img src="../assets/img/product-img/{{$product->image}}" alt="">
+                    @foreach ($product->images as $image)
+                        <img src="{{$image->source}}" alt="Product Image"/>
+                    @endforeach
                 </div>
             </div>
 
@@ -24,77 +24,82 @@
                 <p class="product-desc">{!!$product->description!!}</p>
 
                 <!-- Form -->
-                <form class="cart-form clearfix" method="post" name="formProduct" >
+                <div class="cart-form clearfix" >
                     <!-- Select Box -->
                     <div class="select-box d-flex mt-50 mb-30">
-                        <select name="productSize" id="productSize" class="mr-5" onchange="notify('size');">
-                            <?php
-                                for ($i = 0; $i < count($product->size); $i++) {
-                                    echo "<option value='".$product->size[$i]."'>Size: ".$product->size[$i]."</option>";
-                                }
-                            ?>
+                        <select name="productSize" id="productSize" class="mr-5" onchange="changeSize();">
+                            @foreach ($product->sizes as $size)
+                                <option value="{{$size->id}}">{{$size->name}}</option>
+                            @endforeach
                         </select>
-                        <select name="productColor" id="productColor" onchange="notify('color');">
-                            <?php
-                                for ($j = 0; $j < count($product->color); $j++) {
-                                    echo "<option value='".$product->color[$j]."'>Color: ".$product->color[$j]."</option>";
-                                }
-                            ?>
+                        <select name="productColor" id="productColor" onchange="changeColor();">
+                            @foreach ($product->colors as $color)
+                                <option value="{{$color->id}}">{{$color->name}}</option>
+                            @endforeach
                         </select>
                     </div>
                     <!-- Cart & Favourite Box -->
                     <div class="cart-fav-box d-flex align-items-center">
                         <!-- Cart -->
-                        <button type="submit" name="addtocart"  class="btn essence-btn" id="addToCart">Add to cart</button>
+                        <form id="addtocart" method="POST" action="{{url('/cart')}}">
+                            @csrf
+                            <input type="hidden" name="stock_id" id="stock_id" value="{{$current_stock}}"/>
+                            <button type="submit" class="btn essence-btn" id="cart-btn">
+                                Add to cart
+                            </button>
+                        </form>
                         <!-- Favourite -->
                         <div class="product-favourite ml-4">
                             <a href="#" class="favme fa fa-heart"></a>
                         </div>
                     </div>
-                </form>
+                </div>
                 <div id='alert'></div>
             </div>
         </section>
         <!-- ##### Single Product Details Area End ##### -->
     </div>
     <script>
-        function notify(itemchanging) {
-            <?php
-            use Illuminate\Support\Facades\URL;
-            $url = url('/')."/products/ajaxDetail";
-            ?>
-            var productId = <?php echo $product->id; ?>;
-            var color = window.document.getElementById('productColor').value;
-            var size = window.document.getElementById('productSize').value;
+        var stock_id = $("#stock_id"); 
+        var product_id = {{$product->id}};
+        var color = document.getElementById('productColor');
+        var size = document.getElementById('productSize');
+        
+        function changeSize() {
             $(document).ready(function(){
                 $.ajax({
-                    url:"/getPrice",
-                    method:"GET",
-                    async:true,
-                    data:{color: color, size: size, id: productId, itemchanging: itemchanging },
+                    url: "/product/colors",
+                    method: "GET",
+                    async: true,
+                    data: { size_id: size.value, product_id: product_id },
                     success: function(response) {
-                        if(response.selling_price != null) {
-                            document.getElementById("addToCart").disabled = false;
-                            $('#productPrice').empty().html(response.selling_price+ " VND");
-                            $('#alert').empty();
-                            if(response.color && response.color != null) {
-                                var rewrite ='';
-                                for(var i = 0; i < (response.color).length; i++ ) {
-                                    rewrite+= "<option value='"+response.color[i]+"'>Color: "+response.color[i]+"</option>";
-                                }
-                                $('#productColor').empty().html(rewrite);
+                        stock_id.val(response.current_stock);
+                        $('#productPrice').empty().html(response.selling_price+ " VND");
+                        if(response.colors && response.colors != null) {
+                            var rewrite ='';
+                            for(var i = 0; i < (response.colors).length; i++ ) {
+                                rewrite+= "<option value='"+response.colors[i].id+"'>"+response.colors[i].name+"</option>";
                             }
-                        } else {
-                            var message = "<?php echo $product->product_name; ?>"+" are no available with size "+size+" and color "+color;
-                            $('#alert').html(message);
-                            document.getElementById("addToCart").disabled = true;
-                        } 
-                        
-
+                            $('#productColor').empty().html(rewrite);
+                        }
                     }
-
                 });
-           });
+            });
+        }
+
+        function changeColor() {
+            $(document).ready(function(){
+                $.ajax({
+                    url: "/product/price",
+                    method: "GET",
+                    async: true,
+                    data: { color_id: color.value, size_id: size.value, product_id: product_id },
+                    success: function(response) {
+                        stock_id.val(response.current_stock);
+                        $('#productPrice').empty().html(response.selling_price+ " VND");
+                    }
+                });
+            });
         }
     </script>
 

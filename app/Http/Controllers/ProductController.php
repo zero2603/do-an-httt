@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use \App\Product;
 use \App\Stock;
 use \App\ProductCategory;
+use \App\Category;
 use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
@@ -39,71 +40,73 @@ class ProductController extends Controller
      */
     public function show($id)
     {
+        $current_stock = null;
         $product = Product::findOrFail($id);
 
-        $productCategories = ProductCategory::where('product_id', '=', $id)->get();
-        $temp = [];
-        foreach($productCategories as $item) {
-            array_push($temp, $item->category_id);
+        $product->categories = Category::leftjoin('product_category', 'product_category.category_id', '=', 'categories.id')
+            ->where('product_id', '=', $id)
+            ->select(DB::raw('categories.*'))
+            ->get();
+
+        $product->images = DB::table('product_images')->where('product_id', '=', $id)->get();
+
+        $stocks = Stock::leftjoin('sizes', 'stock.size_id', '=', 'sizes.id')
+            ->leftjoin('colors', 'stock.color_id', '=', 'colors.id')
+            ->where('product_id', '=', $id)
+            ->select(DB::raw('stock.*, sizes.name AS size_name, colors.name AS color_name'))
+            ->get();
+        $stocks =  $stocks->toArray();
+
+        // sizes
+        $tempSize = [];
+        foreach($stocks as $stock) {
+            array_push($tempSize, (object)['id' => $stock['size_id'], 'name' => $stock['size_name']]);
         }
-        $product->categories = $temp;
+        $product->sizes = array_unique($tempSize, SORT_REGULAR);
 
-        $attributes = Stock::where('product_id', '=', $id)->get();
-        $product->attributes = $attributes;
-
-        $image = DB::table('product_images')->where('product_id', '=', $id)->value('source');
-        $product->image = $image;
-
-        $size_id = DB::table('stock')->where('product_id', '=', $id)->get();
-        foreach ($size_id as $item) {
-            $size[] = DB::table('sizes')->where('id', '=', $item->size_id)->value('name');
+        // colors
+        $tempColor = [];
+        foreach($stocks as $stock) {
+            if($stock['size_id'] == $product->sizes[0]->id) {
+                array_push($tempColor, (object)['id' => $stock['color_id'], 'name' => $stock['color_name']]);
+            }
         }
-        $product->size = array_unique($size);
-        $product->size = array_values($product->size);
+        $product->colors = array_unique($tempColor, SORT_REGULAR);
 
-        $color_id = DB::table('stock')->where('product_id', '=', $id)->where('size_id', '=', $size_id[0]->size_id)->get();
-        foreach ($color_id as $item) {
-            $color[] = DB::table('colors')->where('id', '=', $item->color_id)->value('name');
+        // price and current stock
+        foreach($stocks as $stock) {
+            if($stock['size_id'] == $product->sizes[0]->id && $stock['color_id'] == $product->colors[0]->id) {
+                $product->selling_price = $stock['selling_price'];
+                $current_stock = $stock['id'];
+            }
         }
-        $product->color = array_unique($color);
-        $product->color = array_values($product->color);
-        
-        
-        $selling_price = DB::table('stock')->where('product_id', '=', $id)->value('selling_price');
-        $product->selling_price = $selling_price;
 
-        // print_r($product->id);die(); 
-        return view('user.products.detail', ['product' => $product]);
+        return view('user.products.detail', ['product' => $product, 'current_stock' => $current_stock]);
     }
 
-    function getInfoWhenChange() {
-        $size_id = DB::table('sizes')->where('name', '=', $_GET['size'])->value('id');
-        if(isset($_GET['color']) && isset($_GET['size']) && isset($_GET['id'])) {
-            
-            if(isset($_GET['itemchanging']) && $_GET['itemchanging'] == 'size') {
+    function getColors(Request $request) {
+        $stocks = Stock::leftjoin('colors', 'colors.id', '=', 'stock.color_id')
+        ->where([
+            ['size_id', '=', $request->get('size_id')],
+            ['product_id', '=', $request->get('product_id')]
+        ])
+        ->select(DB::raw('stock.*, colors.name AS color_name'))
+        ->get();
 
-                $color_id = DB::table('stock')->where('product_id', '=', $_GET['id'])->where('size_id', '=', $size_id)->get();
-                foreach ($color_id as $item) {
-                    $color[] = DB::table('colors')->where('id', '=', $item->color_id)->value('name');
-                }
-                $color = array_unique($color);
-                $color = array_values($color);
-                $selling_price = DB::table('stock')->where('product_id', '=', $_GET['id'])->where('color_id', '=', $color_id[0]->color_id)->where('size_id', '=', $size_id )->value('selling_price');
-                $response = [
-                    'color' => $color,
-                    'selling_price' => $selling_price
-                ];
-                return $response;
-
-            } else {
-                $color_id = DB::table('colors')->where('name', '=', $_GET['color'])->value('id');
-                $selling_price = DB::table('stock')->where('product_id', '=', $_GET['id'])->where('color_id', '=', $color_id)->where('size_id', '=', $size_id )->value('selling_price');
-                $response = [
-                    'selling_price' => $selling_price
-                ];
-                return $response;
-            }
-            
+        $tempColor = [];
+        foreach($stocks as $stock) {
+            array_push($tempColor, (object)['id' => $stock['color_id'], 'name' => $stock['color_name']]);
         }
+        return ['colors' => $tempColor, 'current_stock' => $stocks[0]->id, 'selling_price' => $stocks[0]->selling_price];
+    }
+
+    function getPrice(Request $request) {
+        $stock = Stock::where([
+            ['size_id', '=', $request->get('size_id')],
+            ['color_id', '=', $request->get('color_id')],
+            ['product_id', '=', $request->get('product_id')]
+        ])
+        ->first();
+        return ['selling_price' => $stock->selling_price, 'current_stock' => $stock->id];
     }
 }

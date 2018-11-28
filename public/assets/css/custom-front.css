@@ -21,3 +21,24 @@
     height: 254px;
     object-fit: cover;
 }
+
+.owl-carousel .owl-item img {
+    height: 555px;
+    object-fit: cover;
+}
+
+.cart-thumb {
+    width: 195px;
+    height: 200px;
+    object-fit: cover;
+}
+
+button.change-quantity-btn {
+    font-weight: bolder;
+    font-size: 2em;
+    border: none;
+    color: #fff;
+    background: none;
+    cursor: pointer;
+    margin-right: 5px;
+}

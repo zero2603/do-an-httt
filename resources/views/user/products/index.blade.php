@@ -178,7 +178,7 @@
                                     @if($product->image)
                                     <img src="{{$product->image}}" alt="">
                                     @else
-                                    <img src="https://static.umotive.com/img/product_image_thumbnail_placeholder.png" alt="">
+                                    <img src="{{url("/")."/assets/img/product_image_placeholder.png"}}" alt="">
                                     @endif
                                     <!-- Hover Thumb -->
                                     <img class="hover-img" src="" alt="">

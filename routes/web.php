@@ -33,7 +33,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/cart','CartController@getCart');
     Route::post('/cart','CartController@add');
     Route::post('/cart/change', 'CartController@changeQuantity');
-    Route::delete('/cart/remove', 'CartController@remove');
+    Route::delete('/cart/{stock_id}', 'CartController@remove');
 });
 
 // routes admin

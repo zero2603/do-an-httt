@@ -181,10 +181,10 @@
 
                 <h2>Summary</h2>
                 <ul class="summary-table">
-                    <li><span>subtotal:</span> <span>$274.00</span></li>
+                    <li><span>subtotal:</span> <span id="subtotal">$0</span></li>
                     <li><span>delivery:</span> <span>Free</span></li>
-                    <li><span>discount:</span> <span>-15%</span></li>
-                    <li><span>total:</span> <span>$232.00</span></li>
+                    {{-- <li><span>discount:</span> <span>-15%</span></li> --}}
+                    <li><span>total:</span> <span id="total">$0</span></li>
                 </ul>
                 <div class="checkout-btn mt-100">
                     <a href="checkout.html" class="btn essence-btn">check out</a>
@@ -291,19 +291,22 @@
     <!-- Bootstrap js -->
     <script src="{{asset('../../assets/js/bootstrap.min.js')}}"></script>
     <!-- Plugins js -->
-    {{-- <script src="{{asset('../../assets/js/plugins.js')}}"></script> --}}
+    <script src="{{asset('../../assets/js/plugins.js')}}"></script>
     <!-- Classy Nav js -->
     <script src="{{asset('../../assets/js/classy-nav.min.js')}}"></script>
     <!-- Active js -->
     <script src="{{asset('../../assets/js/active.js')}}"></script>
 
     <script>
-        
+        var rootUrl = "{{url('/')}}";
         var element = document.getElementById('account-menu-icon');
         var menu = document.getElementById('account-menu');
         var cart = document.getElementById("cart-list-items");
 
         var cartIcons = document.getElementsByClassName("cart-items-number");
+
+        var subtotal = document.getElementById("subtotal");
+        var total = document.getElementById("total");
 
         $(document).ready(function(){
             $.ajax({
@@ -321,12 +324,18 @@
                     var items = [];
                     response.cart.forEach(item => {
                         let temp = document.createElement("div");
+                        if(!item.product_image) {
+                            image = "assets/img/product_image_placeholder.png";
+                        } else {
+                            image = item.product_image;
+                        }
+
                         temp.className = "single-cart-item";
                         temp.innerHTML =
                             '<a href="#" class="product-image">\
-                                <img src=' + item.product_image + ' class="cart-thumb" alt="">\
+                                <img src=' + rootUrl + '/' + image + ' class="cart-thumb" alt="">\
                                 <div class="cart-item-desc">\
-                                    <span class="product-remove"><i class="fa fa-close" aria-hidden="true"></i></span>\
+                                    <span class="product-remove"><i class="fa fa-close" aria-hidden="true" onclick="remove('+ item.stock_id +');"></i></span>\
                                     <h6>'+ item.product_name + '</h6>\
                                     <p class="size">Size: ' + item.size_name + '</p>\
                                     <p class="color">Color: ' + item.color_name  + '</p>\
@@ -345,6 +354,9 @@
                             </a>';
                         cart.appendChild(temp);      
                     })
+
+                    subtotal.innerHTML = response.total;
+                    total.innerHTML = response.total;
                 }
             })
         });
@@ -358,22 +370,51 @@
                 },
                 data: { stock_id: stock_id, type: "plus" },
                 success: function(response) {
-                   document.getElementById("stock-"+stock_id+"-quantity").innerHTML = response.item.quantity; 
+                    if(response.err) {
+                        window.alert(response.err);
+                    } else {
+                        document.getElementById("stock-"+stock_id+"-quantity").innerHTML = response.item.quantity;
+                        subtotal.innerHTML = response.total;
+                        total.innerHTML = response.total;
+                    }
                 }
             })
         }
 
         function minus(stock_id) {
+            var element = document.getElementById("stock-"+stock_id+"-quantity");
+            if(element.innerHTML == 1) {
+                window.alert("Mỗi sản phẩm phải có số lượng ít nhất là 1");
+            } else {
+                $.ajax({
+                    url: "/cart/change",
+                    type: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: { stock_id: stock_id, type: "minus" },
+                    success: function(response) {
+                        element.innerHTML = response.item.quantity;
+                        subtotal.innerHTML = response.total;
+                        total.innerHTML = response.total;
+                    }
+                })
+            }
+        }
+
+        function remove(stock_id) {
             $.ajax({
-                url: "/cart/change",
-                type: "POST",
+                url: "/cart/" + stock_id,
+                type: "DELETE",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                data: { stock_id: stock_id, type: "minus" },
                 success: function(response) {
-                    console.log(response);
-                    document.getElementById("stock-"+stock_id+"-quantity").innerHTML = response.item.quantity;
+                    if(response.result) {
+                        window.location.reload();
+                    } else {
+                        window.alert("Đấ có lỗi xảy ra. Vui lòng thử lại");
+                    }
                 }
             })
         }

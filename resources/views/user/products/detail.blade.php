@@ -8,9 +8,11 @@
             <!-- Single Product Thumb -->
             <div class="single_product_thumb clearfix">
                 <div class="product_thumbnail_slides owl-carousel">
-                    @foreach ($product->images as $image)
-                        <img src="{{$image->source}}" alt="Product Image"/>
-                    @endforeach
+                        @foreach ($product->images as $image)
+                            <img src="{{url("/")."/".$image->source}}" alt="Product Image"/>
+                        @endforeach
+                        <img src="https://soliloquywp.com/wp-content/uploads/2016/08/How-to-Set-a-Default-Featured-Image-in-WordPress.png" alt="Product Image"/>
+                    
                 </div>
             </div>
 

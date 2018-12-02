@@ -34,52 +34,93 @@ class CartController extends Controller
                 product_images.source AS product_image")
             )
             ->get();
-        return ['cart' => $cartItems];
+
+        $total = 0;
+        foreach($cartItems as $item) {
+            $total += $item->selling_price * $item->quantity;
+        }
+
+        return ['cart' => $cartItems, "total" => $total];
     }
 
     public function add(Request $request) {
         // print_r($request->get('stock_id'));
-        $cart = Cart::create([
+        Cart::create([
             'user_id' => Auth::id(),
             'stock_id' => $request->get('stock_id'),
             'quantity' => 1
         ]);
-        // return ['cart' => $cart];
-        return redirect()->back()->with(['cart' => $cart]);
+        
+        // get cart total after insert 
+        $cartItems = Cart::leftjoin('stock', 'carts.stock_id', '=', 'stock.id')
+            ->leftjoin('products', 'products.id', '=', 'stock.product_id')
+            ->where('user_id', '=', Auth::id())
+            ->select(DB::raw("
+                products.*, 
+                stock.selling_price AS selling_price, 
+                stock.id AS stock_id,
+                carts.quantity")
+            )
+            ->get();
+
+        $total = 0;
+        foreach($cartItems as $item) {
+            $total += $item->selling_price * $item->quantity;
+        }
+
+        return redirect()->back()->with(["total" => $total]);
     }
 
     public function remove($stock_id) {
-        $cart = Cart::where([
+        $result = Cart::where([
             'user_id' => Auth::id(),
-            'stock_id' => $request->stock_id,
+            'stock_id' => $stock_id,
         ])->delete();
 
-        return ['cart' => $cart];
+        return (["result" => $result]);
     }
 
     public function changeQuantity(Request $request) {
+        $user_id = Auth::id();
 
         if($request->type == 'plus') {
             $result = Cart::where([
-                'user_id' => Auth::id(),
+                'user_id' => $user_id,
                 'stock_id' => $request->stock_id,
-            ])
-            ->update(['quantity'=> DB::raw('quantity+1')]);
+            ])->update(['quantity' => DB::raw('quantity + 1')]);
         }
         if($request->type == 'minus') {
             $result = Cart::where([
-                'user_id' => Auth::id(),
+                'user_id' => $user_id,
                 'stock_id' => $request->stock_id,
-            ])
-            ->update(['quantity'=> DB::raw('quantity-1')]);
+            ])->update(['quantity' => DB::raw('quantity - 1')]);
         }
         
+        $current_item = null;
         if($result) {
-            $item = Cart::where([
-                'user_id' => Auth::id(),
+            $current_item = $result = Cart::where([
+                'user_id' => $user_id,
                 'stock_id' => $request->stock_id,
             ])->first();
-            return ['item' => $item];
         }
+
+        // get cart total after change 
+        $cartItems = Cart::leftjoin('stock', 'carts.stock_id', '=', 'stock.id')
+            ->leftjoin('products', 'products.id', '=', 'stock.product_id')
+            ->where('user_id', '=', $user_id)
+            ->select(DB::raw("
+                products.*, 
+                stock.selling_price AS selling_price, 
+                stock.id AS stock_id,
+                carts.quantity")
+            )
+            ->get();
+
+        $total = 0;
+        foreach($cartItems as $item) {
+            $total += $item->selling_price * $item->quantity;
+        }
+
+        return ['item' => $current_item, "total" => $total];
     }
 }

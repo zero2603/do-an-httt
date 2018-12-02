@@ -22,6 +22,10 @@
     object-fit: cover;
 }
 
+.owl-carousel {
+    /* display: block !important; */
+}
+
 .owl-carousel .owl-item img {
     height: 555px;
     object-fit: cover;

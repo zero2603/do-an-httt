@@ -46,3 +46,7 @@ button.change-quantity-btn {
     cursor: pointer;
     margin-right: 5px;
 }
+
+.card {
+    width: 100%;
+}

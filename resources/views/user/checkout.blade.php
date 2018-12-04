@@ -8,15 +8,15 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Thông tin giao hàng</h5>
-                    <form>
+                    <form method="POST" action="{{url('/checkout')}}">
                         @csrf
                         <div class="form-group">
                             <label>Họ tên người nhận hàng</label>
-                            <input type="text" class="form-control" name="name" value="{{$user->first_name." ".$user->last_name}}" required/>
+                            <input type="text" class="form-control" name="receiver_name" value="{{$user->first_name." ".$user->last_name}}" required/>
                         </div>
                         <div class="form-group">
                             <label>Số điện thoại người nhận hàng</label>
-                            <input type="number" class="form-control" name="phone" value="{{$user->phone_number}}" required/>
+                            <input type="number" class="form-control" name="receiver_phone" value="{{$user->phone_number}}" required/>
                         </div>
                         <div class="form-group">
                             <label>Tỉnh / Thành phố</label>
@@ -24,11 +24,31 @@
                         </div>
                         <div class="form-group">
                             <label>Địa chỉ</label>
-                            <input type="text" class="form-control" name="town_city" value="{{$user->address_1}}" required/>
+                            <input type="text" class="form-control" name="address_1" value="{{$user->address_1}}" required/>
                         </div>
                         <div class="form-group">
                             <label>Địa chỉ 2</label>
-                            <input type="text" class="form-control" name="town_city" value="{{$user->address_2}}" required/>
+                            <input type="text" class="form-control" name="address_2" value="{{$user->address_2}}"/>
+                        </div>
+                        <hr/>
+                        <div class="form-group">
+                            <h5>Chọn phương thức thanh toán</h5>
+                            <div class="form-check">
+                                <input type="radio" name="payment_type" class="form-check-input" value="COD" required/>
+                                <label class="form-check-label">
+                                    Ship COD
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" name="payment_type" class="form-check-input" value="ATM" required/>
+                                <label class="form-check-label">
+                                    Thanh toán ATM
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Thông tin thẻ ATM</label>
+                            <textarea class="form-control" name='other_payment_info'></textarea>
                         </div>
                         <button class="btn btn-primary float-right" type="submit">
                             Xác nhận thanh toán

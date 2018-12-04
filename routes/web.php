@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/cart/{stock_id}', 'CartController@remove');
 
     Route::get('/checkout', "CheckoutController@index");
+    Route::post('/checkout', "CheckoutController@checkout");
 });
 
 // routes admin

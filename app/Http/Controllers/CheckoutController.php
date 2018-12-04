@@ -7,6 +7,10 @@ use Auth;
 use \App\Cart;
 use \App\Product;
 use \App\Stock;
+use \App\Order;
+use \App\OrderItem;
+use \App\Payment;
+use \App\Shipment;
 use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
@@ -42,5 +46,66 @@ class CheckoutController extends Controller
         }
 
         return view('user.checkout', ['user' => $user, 'cartItems' => $cartItems, "total" => $total]);
+    }
+
+    public function checkout(Request $request) {
+        $user_id = Auth::id();
+        $data = $request->all();
+        // create order 
+        $order = Order::create([
+            'user_id' => $user_id,
+            'status' => 'pending'
+        ]);
+
+        // create order item (all items in cart)
+        $cartItems = Cart::leftjoin('stock', 'carts.stock_id', '=', 'stock.id')
+        ->leftjoin('products', 'products.id', '=', 'stock.product_id')
+        ->leftjoin('sizes', 'sizes.id', '=', 'stock.size_id')
+        ->leftjoin('colors', 'colors.id', '=', 'stock.color_id')
+        ->where('user_id', '=', $user_id)
+        ->select(DB::raw("
+            products.id AS product_id, 
+            sizes.name AS size_name, 
+            colors.name AS color_name, 
+            stock.selling_price AS selling_price, 
+            stock.id AS stock_id,
+            carts.quantity AS quantity")
+        )
+        ->get();
+        
+        $temp = [];
+        foreach($cartItems as $item) {
+            array_push($temp, [
+                'order_id' => $order->id,
+                'product_id' => $item->product_id,
+                'order_item_size' => $item->size_name,
+                'order_item_color' => $item->color_name,
+                'order_item_quantity' => $item->quantity,
+                'order_item_price' => $item->selling_price,
+                'created_at' => date('Y-m-d h:i:s'),
+                'updated_at' => date('Y-m-d h:i:s')
+            ]);
+        }
+
+        OrderItem::insert($temp);
+
+        Cart::where('user_id', $user_id)->delete();
+
+        // create shipment
+        Shipment::create([
+            'order_id' => $order->id,
+            'receiver_name' => $data['receiver_name'],
+            'receiver_phone' => $data['receiver_phone'],
+            'shipment_address' => $data['town_city'].", ".$data['address_1'].", ".$data['address_2']
+        ]);
+
+        // create payment
+        Payment::create([
+            'order_id' => $order->id,
+            'payment_type' =>  $data['payment_type'],
+            'other_payment_info' => $data['other_payment_info']
+        ]);
+
+        return ['ok' => 1];
     }
 }

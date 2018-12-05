@@ -28,6 +28,12 @@ Route::get('/products/{id}', 'ProductController@show');
 Route::get('/product/colors','ProductController@getColors');
 Route::get('/product/price','ProductController@getPrice');
 
+Route::get('/{type}','ProductController@getPant');
+Route::get('/shirt','ProductController@getShirt');
+Route::get('/jeans','ProductController@getJeans');
+Route::get('/jacket','ProductController@getJacket');
+Route::get('/dress','ProductController@getDress');
+
 // routes user
 Route::middleware(['auth'])->group(function () {
     Route::get('/cart','CartController@getCart');

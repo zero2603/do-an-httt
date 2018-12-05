@@ -114,7 +114,9 @@
                 </div>
                 <!-- User Login Info -->
                 <div class="user-login-info">
-                    <a href="/user" id="account-menu-icon"><img src="../../assets/img/core-img/user.svg" alt=""></a>
+                    <a href="/user/profile" id="account-menu-icon">
+                        <img src="../../assets/img/core-img/user.svg" alt="">
+                    </a>
                     <div class="d-none" id="account-menu">
                         @guest
                             <li class="nav-item">

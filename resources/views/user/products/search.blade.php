@@ -35,50 +35,19 @@
                                 <li data-toggle="collapse" data-target="#clothing">
                                     <a href="#">Categories</a>
                                     <ul class="sub-menu collapse show" id="clothing">
-                                        <li><a href="/">All</a></li>
-                                        <li><a href="/dress">Dress</a></li>
-                                        
-                                        <li><a href="/jacket">Jacket</a></li>
-                                        <li><a href="/jeans">Jeans</a></li>
-                                        <li><a href="/pant">Pants &amp; Leggings</a></li>
-                                        
-                                        <li><a href="/shirt">Shirt &amp; Blouses</a></li>
-                                    </ul>
-                                </li>
-                                <!-- Single Item -->
-                                <li data-toggle="collapse" data-target="#shoes" class="collapsed">
-                                    <a href="#">shoes</a>
-                                    <ul class="sub-menu collapse" id="shoes">
                                         <li><a href="#">All</a></li>
-                                        <li><a href="#">Bodysuits</a></li>
-                                        <li><a href="#">Dresses</a></li>
-                                        <li><a href="#">Hoodies &amp; Sweats</a></li>
-                                        <li><a href="#">Jackets &amp; Coats</a></li>
+                                        <li><a href="#">Dress</a></li>
+                                        
+                                        
                                         <li><a href="#">Jeans</a></li>
                                         <li><a href="#">Pants &amp; Leggings</a></li>
-                                        <li><a href="#">Rompers &amp; Jumpsuits</a></li>
+                                        
                                         <li><a href="#">Shirts &amp; Blouses</a></li>
-                                        <li><a href="#">Shirts</a></li>
-                                        <li><a href="#">Sweaters &amp; Knits</a></li>
+
+                                   
                                     </ul>
                                 </li>
-                                <!-- Single Item -->
-                                <li data-toggle="collapse" data-target="#accessories" class="collapsed">
-                                    <a href="#">accessories</a>
-                                    <ul class="sub-menu collapse" id="accessories">
-                                        <li><a href="#">All</a></li>
-                                        <li><a href="#">Bodysuits</a></li>
-                                        <li><a href="#">Dresses</a></li>
-                                        <li><a href="#">Hoodies &amp; Sweats</a></li>
-                                        <li><a href="#">Jackets &amp; Coats</a></li>
-                                        <li><a href="#">Jeans</a></li>
-                                        <li><a href="#">Pants &amp; Leggings</a></li>
-                                        <li><a href="#">Rompers &amp; Jumpsuits</a></li>
-                                        <li><a href="#">Shirts &amp; Blouses</a></li>
-                                        <li><a href="#">Shirts</a></li>
-                                        <li><a href="#">Sweaters &amp; Knits</a></li>
-                                    </ul>
-                                </li>
+                                
                             </ul>
                         </div>
                     </div>
@@ -175,7 +144,7 @@
                                     @if($product->image)
                                     <img src="{{$product->image}}" alt="">
                                     @else
-                                    <img src="{{url("/")."/assets/img/product_image_placeholder.png"}}" alt="">
+                                    <img src="https://static.umotive.com/img/product_image_thumbnail_placeholder.png" alt="">
                                     @endif
                                     <!-- Hover Thumb -->
                                     <img class="hover-img" src="" alt="">
@@ -196,22 +165,29 @@
                                     <p class="product-price">{{$product->selling_price}} <span>VND</span></p>
 
                                     <!-- Hover Content -->
-                                    {{-- <div class="hover-content">
+                                    <div class="hover-content">
                                         <!-- Add to Cart -->
                                         <div class="add-to-cart-btn">
                                             <a href="#" class="btn essence-btn">Add to Cart</a>
                                         </div>
-                                    </div> --}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         @endforeach
                     </div>
+                    <?php
+                        if(isset($products) && count($products) == 0) {
+                            echo "<div><span>No products found!</span></div>";
+                        }
+                    ?>
                 </div>
+
                 <!-- Pagination -->
                 <nav aria-label="navigation">
                     {{ $products->links() }}
                 </nav>
+                
             </div>
         </div>
     </div>

@@ -28,7 +28,7 @@ Route::get('/products/{id}', 'ProductController@show');
 Route::get('/product/colors','ProductController@getColors');
 Route::get('/product/price','ProductController@getPrice');
 
-Route::get('/{type}','ProductController@getPant');
+Route::get('/pant','ProductController@getPant');
 Route::get('/shirt','ProductController@getShirt');
 Route::get('/jeans','ProductController@getJeans');
 Route::get('/jacket','ProductController@getJacket');

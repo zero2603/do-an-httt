@@ -56,6 +56,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('/admin/products', 'Admin\ProductController');
     Route::resource('/admin/users', 'Admin\UserController');
     Route::resource('/admin/categories', 'Admin\CategoryController');
+    Route::resource('/admin/orders', 'Admin\OrderController');
 
     // product attributes
     Route::get('/admin/product-attribute/sizes', 'Admin\AttributeController@listSizes');

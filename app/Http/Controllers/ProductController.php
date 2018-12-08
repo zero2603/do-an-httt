@@ -111,8 +111,8 @@ class ProductController extends Controller
     }
 
     public function search() {
-        if(isset($_GET['q'])) {
-            $query =$_GET['q'];
+        if(isset($_GET['search'])) {
+            $query =$_GET['search'];
 
          $products =  DB::table('products')->where('product_name', 'like', '%'.$query.'%')->paginate(9);
          foreach($products as $product) {
@@ -131,88 +131,23 @@ class ProductController extends Controller
     }
 
 
-    public function getPant($type) {
-        // $category_id = DB::table('categories')->where('name', '=', 'pant')->get();
-        // $product_ids = DB::table('product_category')->where('category_id','=',$category_id[0]->id)->get();
-        // $products = [];
-        // // print_r($product_ids);die();
-        // foreach ($product_ids as $product_id) {
-        //     $product = DB::table('products')->where('id','=',$product_id->product_id)->get();
-        //     $selling_price = DB::table('stock')->where('product_id', '=', $product[0]->id)->value('selling_price');
-        //     $image = DB::table('product_images')->where('product_id', '=', $product[0]->id)->value('source');
-        //     $product[0]->selling_price = $selling_price;
-        //     $product[0]->image = $image;
-        //     $products[] = $product[0];
-        // }
-        // return view('user.products.pant',['products' => $products]);
-        print_r($type);
+    public function getSubProduct($type) {
+        $category_id = DB::table('categories')->where('name', '=', $type)->get();
+        if (isset($category_id[0])) {
+            $product_ids = DB::table('product_category')->where('category_id','=',$category_id[0]->id)->get();
+            $products = [];
+            // print_r($product_ids);die();
+            foreach ($product_ids as $product_id) {
+                $product = DB::table('products')->where('id','=',$product_id->product_id)->get();
+                $selling_price = DB::table('stock')->where('product_id', '=', $product[0]->id)->value('selling_price');
+                $image = DB::table('product_images')->where('product_id', '=', $product[0]->id)->value('source');
+                $product[0]->selling_price = $selling_price;
+                $product[0]->image = $image;
+                $products[] = $product[0];
+            }
+        }
+        return view('user.products.'.$type ,['products' => $products]);
     }
 
-    public function getJeans() {
-        $category_id = DB::table('categories')->where('name', '=', 'jeans')->get();
-        $product_ids = DB::table('product_category')->where('category_id','=',$category_id[0]->id)->get();
-        $products = [];
-        // print_r($product_ids);die();
-        foreach ($product_ids as $product_id) {
-            $product = DB::table('products')->where('id','=',$product_id->product_id)->get();
-            $selling_price = DB::table('stock')->where('product_id', '=', $product[0]->id)->value('selling_price');
-            $image = DB::table('product_images')->where('product_id', '=', $product[0]->id)->value('source');
-            $product[0]->selling_price = $selling_price;
-            $product[0]->image = $image;
-            $products[] = $product[0];
-        }
-        return view('user.products.jeans',['products' => $products]);
-        
-    }
 
-    public function getShirt() {
-        $category_id = DB::table('categories')->where('name', '=', 'shirt')->get();
-        $product_ids = DB::table('product_category')->where('category_id','=',$category_id[0]->id)->get();
-        $products = [];
-        // print_r($product_ids);die();
-        foreach ($product_ids as $product_id) {
-            $product = DB::table('products')->where('id','=',$product_id->product_id)->get();
-            $selling_price = DB::table('stock')->where('product_id', '=', $product[0]->id)->value('selling_price');
-            $image = DB::table('product_images')->where('product_id', '=', $product[0]->id)->value('source');
-            $product[0]->selling_price = $selling_price;
-            $product[0]->image = $image;
-            $products[] = $product[0];
-        }
-        return view('user.products.shirt',['products' => $products]);
-        
-    }
-
-    public function getDress() {
-        $category_id = DB::table('categories')->where('name', '=', 'dress')->get();
-        $product_ids = DB::table('product_category')->where('category_id','=',$category_id[0]->id)->get();
-        $products = [];
-        // print_r($product_ids);die();
-        foreach ($product_ids as $product_id) {
-            $product = DB::table('products')->where('id','=',$product_id->product_id)->get();
-            $selling_price = DB::table('stock')->where('product_id', '=', $product[0]->id)->value('selling_price');
-            $image = DB::table('product_images')->where('product_id', '=', $product[0]->id)->value('source');
-            $product[0]->selling_price = $selling_price;
-            $product[0]->image = $image;
-            $products[] = $product[0];
-        }
-        return view('user.products.dress',['products' => $products]);
-        
-    }
-
-    public function getJacket() {
-        $category_id = DB::table('categories')->where('name', '=', 'jacket')->get();
-        $product_ids = DB::table('product_category')->where('category_id','=',$category_id[0]->id)->get();
-        $products = [];
-        // print_r($product_ids);die();
-        foreach ($product_ids as $product_id) {
-            $product = DB::table('products')->where('id','=',$product_id->product_id)->get();
-            $selling_price = DB::table('stock')->where('product_id', '=', $product[0]->id)->value('selling_price');
-            $image = DB::table('product_images')->where('product_id', '=', $product[0]->id)->value('source');
-            $product[0]->selling_price = $selling_price;
-            $product[0]->image = $image;
-            $products[] = $product[0];
-        }
-        return view('user.products.jacket',['products' => $products]);
-        
-    }
 }

@@ -18,21 +18,14 @@ Route::get('/', 'ProductController@index');
 Route::get('/home', function () {
     return view('home');
 });
-Route::get('/user/profile', function () {
-    return view('user.profile');
-});
-
+Route::get('/search','ProductController@search');
 Auth::routes();
 Route::get('/products', 'ProductController@index');
 Route::get('/products/{id}', 'ProductController@show');
 Route::get('/product/colors','ProductController@getColors');
 Route::get('/product/price','ProductController@getPrice');
 
-Route::get('/pant','ProductController@getPant');
-Route::get('/shirt','ProductController@getShirt');
-Route::get('/jeans','ProductController@getJeans');
-Route::get('/jacket','ProductController@getJacket');
-Route::get('/dress','ProductController@getDress');
+Route::get('/{productType}','ProductController@getSubProduct');
 
 // routes user
 Route::middleware(['auth'])->group(function () {
@@ -43,6 +36,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/checkout', "CheckoutController@index");
     Route::post('/checkout', "CheckoutController@checkout");
+
+    Route::get('/user/profile','ProfileController@index');
+
 });
 
 // routes admin

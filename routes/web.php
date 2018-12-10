@@ -25,8 +25,6 @@ Route::get('/products/{id}', 'ProductController@show');
 Route::get('/product/colors','ProductController@getColors');
 Route::get('/product/price','ProductController@getPrice');
 
-Route::get('/{productType}','ProductController@getSubProduct');
-
 // routes user
 Route::middleware(['auth'])->group(function () {
     Route::get('/cart','CartController@getCart');
@@ -66,3 +64,5 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/admin/product/images/upload', 'Admin\ProductController@addImage');
     Route::delete('/admin/product/images/remove/{id}', 'Admin\ProductController@removeImage');
 });
+
+Route::get('/{productType}','ProductController@getSubProduct');

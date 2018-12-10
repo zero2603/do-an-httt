@@ -115,6 +115,9 @@
                             <a href="/admin/categories"><i class="fa fa-tag fa-fw"></i> Danh mục sản phẩm</a>
                         </li> 
                         <li>
+                            <a href="/admin/orders"><i class="fa fa-tag fa-fw"></i> Đơn hàng</a>
+                        </li> 
+                        <li>
                             <a href="#"><i class="fa fa-info fa-fw"></i> Thuộc tính sản phẩm<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>

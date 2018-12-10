@@ -12,6 +12,7 @@
                 <th>Trạng thái</th>
                 <th>Tổng tiền (VND)</th>
                 <th>Ngày tạo</th>
+                <th>Option</th>
             </tr>
         </thead>
         <tbody>
@@ -31,10 +32,26 @@
                     {{$order->status}}
                 </td>
                 <td>
-                        {{$order->total_amount}}
-                    </td>
+                    {{$order->total_amount}}
+                </td>
                 <td>
                     {{$order->created_at}}
+                </td>
+                <td>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a href="{{url('admin/orders/'.$order->id)}}">
+                                <button type="button" class="btn btn-sm btn-primary">Xem</button>
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <form method="POST" action={{url('/admin/orders/'.$order->id)}}>
+                                @method('DELETE')
+                                {{ csrf_field() }}
+                                <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                            </form>
+                        </div>
+                    </div>
                 </td>
             </tr>
             @endforeach

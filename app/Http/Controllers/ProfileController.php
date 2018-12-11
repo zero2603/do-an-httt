@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use \App\Users;
+use Auth;
 use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller

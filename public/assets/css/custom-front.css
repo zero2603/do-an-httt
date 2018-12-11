@@ -46,3 +46,24 @@ button.change-quantity-btn {
 .card {
     width: 100%;
 }
+
+.custom-input {
+    height: 42px;
+    border: 1px solid #ebebeb;
+    background-color: transparent;
+    border-radius: 0;
+}
+
+.btn {
+    height: 42px;
+    border-radius: 0;
+}
+
+.card {
+    border-radius: 0;
+}
+
+.card-header {
+    background-color: #2c3e50;
+    color: #fff;
+}

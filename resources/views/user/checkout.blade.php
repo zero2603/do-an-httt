@@ -2,12 +2,27 @@
 
 @section('content')
 
+<div class="breadcumb_area bg-img" style="background-image: url(img/bg-img/breadcumb.jpg);">
+    <div class="container h-100">
+        <div class="row h-100 align-items-center">
+            <div class="col-12">
+                <div class="page-title text-center">
+                    <h2>Checkout</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="checkout_area">
 <div class="container mb-4">
     <div class="row">
         <div class="col-6">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Thông tin giao hàng</h5>
+
+                    <div class="checkout_details_area mt-50 clearfix">
                     <form method="POST" action="{{url('/checkout')}}" novalidate>
                         @csrf
                         <div class="form-group">
@@ -54,6 +69,7 @@
                             Xác nhận thanh toán
                         </button>
                     </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -90,6 +106,7 @@
             </table>
         </div>
     </div>
+</div>
 </div>
 
 <script>

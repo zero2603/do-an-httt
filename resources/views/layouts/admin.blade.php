@@ -11,7 +11,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+    <title>Admin Page</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="{{asset('assets/css/bootstrap_v3.3.7.css')}}" rel="stylesheet">
@@ -54,7 +54,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">SB Admin v2.0</a>
+                <a class="navbar-brand" href="{{url('/admin')}}">Admin Page</a>
             </div>
             <!-- /.navbar-header -->
 
@@ -65,9 +65,10 @@
                         <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                        </li>
-                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        <li>
+                            <a href="{{url('/admin/users/'.Auth::id().'/edit')}}">
+                                <i class="fa fa-user fa-fw"></i> User Profile
+                            </a>
                         </li>
                         <li class="divider"></li>
                         <li>
@@ -115,7 +116,7 @@
                             <a href="/admin/categories"><i class="fa fa-tag fa-fw"></i> Danh mục sản phẩm</a>
                         </li> 
                         <li>
-                            <a href="/admin/orders"><i class="fa fa-tag fa-fw"></i> Đơn hàng</a>
+                            <a href="/admin/orders"><i class="fa fa-file fa-fw"></i> Đơn hàng</a>
                         </li> 
                         <li>
                             <a href="#"><i class="fa fa-info fa-fw"></i> Thuộc tính sản phẩm<span class="fa arrow"></span></a>

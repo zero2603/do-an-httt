@@ -50,3 +50,13 @@
     border-radius: 10px;
     padding: 5em 7em;
 }
+
+.row.comment {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.reply {
+    border-left: solid 5px #2c3e50;
+    padding-left: 10px;
+}

@@ -10,6 +10,7 @@ use \App\Category;
 use \App\ProductCategory;
 use \App\ProductImage;
 use \App\Stock;
+use \App\Comment;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -131,12 +132,42 @@ class ProductController extends Controller
 
         $images = DB::table('product_images')->where('product_id', '=', $id)->get();
         $product->images = $images;
+
+        $comments = Comment::join('users', 'users.id', '=', 'comments.user_id')
+                    ->where('product_id', '=', $id)
+                    ->orderBy('created_at', 'DESC')
+                    ->select(DB::raw('comments.*, 
+                        users.first_name AS user_first_name, 
+                        users.last_name AS user_last_name, 
+                        users.avatar AS user_avatar'))
+                    ->get();
+        $parents = [];
+        $children = [];
+        foreach($comments as $comment) {
+            // if parent_comment_id is null, comment is parent
+            if(!$comment->parent_comment_id) {
+                array_push($parents, $comment);
+            } else {
+                array_push($children, $comment);
+            }
+        }
+        foreach($parents as $parent) {
+            $temp = [];
+            foreach($children as $child) {
+                if($child->parent_comment_id == $parent->id) {
+                    array_push($temp, $child);
+                }
+            }
+            $parent->reply = $temp;
+        }
             
         return view('admin.products.edit', [
             'product' => $product, 
             'categories' => $categories, 
             'sizes' => $sizes,
-            'colors' => $colors    
+            'colors' => $colors,
+            'comments' => $parents,
+            'number_of_comments' => count($comments)    
         ]);
     }
 

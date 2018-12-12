@@ -5,6 +5,9 @@
 <h1 class="page-header">{{__('Sửa sản phẩm')}}</h1>
 
 <div>
+    <div>
+        Sản phẩm này có {{$number_of_comments}} bình luận. <a href="javascript:void(0);" onclick="viewComments();">Xem bình luận</a>
+    </div>
         <h4>Hình ảnh sản phẩm</h4>
         <div class="row" id="list-images">
         @foreach ($product->images as $item)
@@ -156,6 +159,54 @@
                 </div>
             </div> 
         </div>
+
+        <div class="comment-area">
+            <button type="button" class="btn btn-info d-none" id="open-modal-btn" data-toggle="modal" data-target="#myModal">Open Modal</button>
+            <!-- Modal -->
+            <div id="myModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Tất cả bình luận</h4>
+                        </div>
+                        <div class="modal-body">
+                            @foreach ($comments as $comment)
+                                <div class="row comment">
+                                    <div class="col-md-2">
+                                        <img src="{{url('/')."/".$comment->user_avatar}}" width="100%"/>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div><b>{{$comment->user_first_name}} {{$comment->user_last_name}}</b></div>
+                                        <div>{{$comment->rating}} <i class="fa fa-star"></i>   {{$comment->created_at}}</div> 
+                                        <div>{{$comment->content}}</div>
+                                        {{-- reply --}}
+                                        <div class="reply">
+                                            @foreach ($comment->reply as $item)
+                                                <div class="row comment">
+                                                    <div class="col-md-2">
+                                                        <img src="{{url('/')."/".$item->user_avatar}}" width="100%"/>
+                                                    </div>
+                                                    <div class="col-md-10">
+                                                        <div><b>{{$item->user_first_name}} {{$item->user_last_name}}</b></div>
+                                                        <div>{{$item->rating}} <i class="fa fa-star"></i>   {{$item->created_at}}</div> 
+                                                        <div>{{$item->content}}</div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 </div>
 
 {{-- ckeditor --}}
@@ -216,5 +267,9 @@
             console.log('aaaaaaaaaaa');
         })
     });
+
+    function viewComments() {
+        document.getElementById('open-modal-btn').click();
+    }
 </script>
 @endsection

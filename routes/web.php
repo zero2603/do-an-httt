@@ -37,6 +37,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/user/profile','ProfileController@index');
 
+    Route::post('/comment','CommentController@create');
 });
 
 // routes admin

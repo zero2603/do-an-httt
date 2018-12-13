@@ -7,6 +7,7 @@ use \App\Product;
 use \App\Stock;
 use \App\ProductCategory;
 use \App\Category;
+use \App\Comment;
 use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
@@ -81,7 +82,47 @@ class ProductController extends Controller
             }
         }
 
-        return view('user.products.detail', ['product' => $product, 'current_stock' => $current_stock]);
+        // get comments of product
+        $comments = Comment::join('users', 'users.id', '=', 'comments.user_id')
+                    ->where('product_id', '=', $id)
+                    // ->orderBy('created_at', 'DESC')
+                    ->select(DB::raw('comments.*, 
+                        users.first_name AS user_first_name, 
+                        users.last_name AS user_last_name, 
+                        users.avatar AS user_avatar'))
+                    ->get();
+        $parents = [];
+        $children = [];
+        $totalRating = 0;
+        foreach($comments as $comment) {
+            $totalRating += (int) $comment->rating; 
+            // if parent_comment_id is null, comment is parent
+            if(!$comment->parent_comment_id) {
+                array_push($parents, $comment);
+            } else {
+                array_push($children, $comment);
+            }
+        }
+        foreach($parents as $parent) {
+            $temp = [];
+            foreach($children as $child) {
+                if($child->parent_comment_id == $parent->id) {
+                    array_push($temp, $child);
+                }
+            }
+            $parent->reply = $temp;
+        }
+
+        $num_of_comments = count($comments);
+        $avg_rating = $num_of_comments ? $totalRating / (float) $num_of_comments : 0;
+
+        return view('user.products.detail', [
+            'product' => $product, 
+            'current_stock' => $current_stock,
+            'comments' => $parents,
+            'num_of_comments' => $num_of_comments,
+            'avg_rating' => $avg_rating
+        ]);
     }
 
     function getColors(Request $request) {

@@ -67,3 +67,34 @@ button.change-quantity-btn {
     background-color: #2c3e50;
     color: #fff;
 }
+
+.product-comments {
+    margin: 50px 0px;
+}
+ 
+.row.comment {
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+.reply {
+    border-left: solid 5px #2c3e50;
+    padding-left: 10px;
+    margin-left: -15px;
+    margin-top: 30px;
+}
+
+.comment_user_avatar {
+    width: 100%;
+    max-width: 100px;
+    object-fit: cover;
+}
+
+a {
+    font-size: 1em;
+    color: blue
+}
+
+.selected {
+    color: #f1c40f
+}

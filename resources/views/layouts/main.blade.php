@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="{{asset('../../assets/css/core-style.css')}}">
     <link rel="stylesheet" href="{{asset('../../assets/css/custom-front.css')}}">
     <link rel="stylesheet" href="{{asset('../../assets/style.css')}}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
 
     <!-- jQuery (Necessary for All JavaScript Plugins) -->
     <script src="{{asset('../../assets/js/jquery/jquery-2.2.4.min.js')}}"></script>

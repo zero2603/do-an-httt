@@ -42,6 +42,7 @@
             background-color: #4e4646;
                 padding: 70px 0 0px;
         }
+
     </style>
 </head>
 
@@ -71,11 +72,11 @@
                     </form>
                 </div>
                 <!-- Favourite Area -->
-                <div class="favourite-area">
+                <div class="favourite-area icon">
                     <a href="#"><img src="../../assets/img/core-img/heart.svg" alt=""></a>
                 </div>
                 <!-- User Login Info -->
-                <div class="user-login-info">
+                <div class="user-login-info icon">
                     <a href="/user/profile" id="account-menu-icon">
                         <img src="../../assets/img/core-img/user.svg" alt="">
                     </a>
@@ -109,7 +110,7 @@
                     </div>
                 </div>
                 <!-- Cart Area -->
-                <div class="cart-area">
+                <div class="cart-area icon">
                     <a href="#" id="essenceCartBtn">
                         <img src="../../assets/img/core-img/bag.svg" alt=""> 
                         <span class="cart-items-number"></span>

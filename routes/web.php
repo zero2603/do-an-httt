@@ -46,9 +46,8 @@ Route::get('/admin/login', 'Admin\Auth\LoginController@index');
 Route::post('/admin/login', 'Admin\Auth\LoginController@login')->name('admin_login');
 
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin', function() {
-        return view('layouts.admin');
-    });
+    Route::get('/admin', 'Admin\StatisticController@index');
+    Route::get('/admin/revenue', 'Admin\StatisticController@getRevenue');
     Route::resource('/admin/products', 'Admin\ProductController');
     Route::resource('/admin/users', 'Admin\UserController');
     Route::resource('/admin/categories', 'Admin\CategoryController');

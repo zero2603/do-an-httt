@@ -4,11 +4,11 @@
 
 <!-- ##### Breadcumb Area Start ##### -->
 <div class="breadcumb_area bg-img" style="background-image: url(img/bg-img/breadcumb.jpg);">
-    <div class="container h-100">
-        <div class="row h-100 align-items-center">
+    <div class="container h-100" style="background: url('https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/hbz-the-list-maxi-dresses-00-index-1531251147.jpg?crop=5.5xw:1.00xh;0,0&resize=500:*');">
+        <div class="row h-100 align-items-center" >
             <div class="col-12">
                 <div class="page-title text-center">
-                    <h2>dresses</h2>
+                    <h2 style="color: green">New Arrival</h2>
                 </div>
             </div>
         </div>

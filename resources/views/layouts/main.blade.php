@@ -20,12 +20,29 @@
     <link rel="stylesheet" href="{{asset('../../assets/css/core-style.css')}}">
     <link rel="stylesheet" href="{{asset('../../assets/css/custom-front.css')}}">
     <link rel="stylesheet" href="{{asset('../../assets/style.css')}}">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!-- jQuery (Necessary for All JavaScript Plugins) -->
     <script src="{{asset('../../assets/js/jquery/jquery-2.2.4.min.js')}}"></script>
     {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> --}}
-
+    <style>
+        .footer_area .single_widget_area .footer_social_area a {
+            color: #ffffff;
+            display: inline-block;
+            padding: 0 10px;
+            font-size: 30px;
+            padding-top: 76px;
+        }
+        .footer_area .single_widget_area .footer_social_area a:hover {
+            color: #ff084e;
+            
+        }
+        .footer_area {
+            background-color: #4e4646;
+                padding: 70px 0 0px;
+        }
+    </style>
 </head>
 
 <body>
@@ -41,63 +58,7 @@
                     <span class="navbarToggler"><span></span><span></span><span></span></span>
                 </div>
                 <!-- Menu -->
-                <div class="classy-menu">
-                    <!-- close btn -->
-                    <div class="classycloseIcon">
-                        <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
-                    </div>
-                    <!-- Nav Start -->
-                    <div class="classynav">
-                        <ul>
-                            <li><a href="#">Shop</a>
-                                <div class="megamenu">
-                                    <ul class="single-mega cn-col-4">
-                                        <li class="title">Women's Collection</li>
-                                        <li><a href="#">Dresses</a></li>
-                                        <li><a href="#">Blouses &amp; Shirts</a></li>
-                                        <li><a href="#">T-shirts</a></li>
-                                        <li><a href="#">Rompers</a></li>
-                                        <li><a href="#">Bras &amp; Panties</a></li>
-                                    </ul>
-                                    <ul class="single-mega cn-col-4">
-                                        <li class="title">Men's Collection</li>
-                                        <li><a href="#">T-Shirts</a></li>
-                                        <li><a href="#">Polo</a></li>
-                                        <li><a href="#">Shirts</a></li>
-                                        <li><a href="#">Jackets</a></li>
-                                        <li><a href="#">Trench</a></li>
-                                    </ul>
-                                    <ul class="single-mega cn-col-4">
-                                        <li class="title">Kid's Collection</li>
-                                        <li><a href="#">Dresses</a></li>
-                                        <li><a href="#">Shirts</a></li>
-                                        <li><a href="#">T-shirts</a></li>
-                                        <li><a href="#">Jackets</a></li>
-                                        <li><a href="#">Trench</a></li>
-                                    </ul>
-                                    <div class="single-mega cn-col-4">
-                                        <img src="../../assets/img/bg-img/bg-6.jpg" alt="">
-                                    </div>
-                                </div>
-                            </li>
-                            <li><a href="#">Pages</a>
-                                <ul class="dropdown">
-                                    <li><a href="#">Home</a></li>
-                                    <li><a href="#">Shop</a></li>
-                                    <li><a href="#">Product Details</a></li>
-                                    <li><a href="#">Checkout</a></li>
-                                    <li><a href="#">Blog</a></li>
-                                    <li><a href="#">Single Blog</a></li>
-                                    <li><a href="#">Regular Page</a></li>
-                                    <li><a href="#">Contact</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="#">Blog</a></li>
-                            <li><a href="#">Contact</a></li>
-                        </ul>
-                    </div>
-                    <!-- Nav End -->
-                </div>
+                
             </nav>
 
             <!-- Header Meta Data -->
@@ -209,31 +170,18 @@
                     <div class="single_widget_area d-flex mb-30">
                         <!-- Logo -->
                         <div class="footer-logo mr-50">
-                            <a href="#"><img src="../../assets/img/core-img/logo2.png" alt=""></a>
+                            <a href="#"><h3 style="color: white !important;">BK SHOP</h3></a>
                         </div>
                         <!-- Footer Menu -->
                         <div class="footer_menu">
                             <ul>
-                                <li><a href="#">Shop</a></li>
-                                <li><a href="blog.html">Blog</a></li>
-                                <li><a href="contact.html">Contact</a></li>
+                                <li><a href="contact.html" style="padding-top: 8px;">Contact</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <!-- Single Widget Area -->
-                <div class="col-12 col-md-6">
-                    <div class="single_widget_area mb-30">
-                        <ul class="footer_widget_menu">
-                            <li><a href="#">Order Status</a></li>
-                            <li><a href="#">Payment Options</a></li>
-                            <li><a href="#">Shipping and Delivery</a></li>
-                            <li><a href="#">Guides</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">Terms of Use</a></li>
-                        </ul>
-                    </div>
-                </div>
+                
             </div>
 
             <div class="row align-items-end">
@@ -277,9 +225,9 @@
                         Copyright &copy;<script>
                             document.write(new Date().getFullYear());
 
-                        </script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i>
-                        by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        </script> BK SHOP <i class="fa fa-heart-o" aria-hidden="true"></i>
+                        by <a href="https://colorlib.com" target="_blank" style="color: #787878;">Group 11</a>
+                       
                     </p>
                 </div>
             </div>

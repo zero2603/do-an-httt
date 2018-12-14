@@ -33,7 +33,8 @@ class ProductController extends Controller
                 $selling_price = DB::table('stock')->where('product_id', '=', $product->id)->value('selling_price');
                 $product->selling_price = $selling_price;          
             }
-        return view('user.products.index', ['products' => $products]);
+            $total = count($products);
+        return view('user.products.index', ['products' => $products,  'total' => $total]);
         } else {
             $color_id = DB::table('colors')->where('name', '=', $_GET['color'])->get();
             if(isset($color_id[0])) {
@@ -56,11 +57,11 @@ class ProductController extends Controller
                     $selling_price = DB::table('stock')->where('product_id', '=', $product[0]->id)->value('selling_price');
                     $product->selling_price = $selling_price;          
                 }
-                
+                $total = count($products);
             }
             // print_r($products[0]);die();
             unset($_GET['color']);
-            return view('user.products.filterProduct', ['products' => $products]);
+            return view('user.products.filterProduct', ['products' => $products, 'total' => $total] );
         }
             
         
@@ -218,7 +219,8 @@ class ProductController extends Controller
                     $products[] = $product[0];
                 }
             }
-            return view('user.products.'.$type ,['products' => $products]);
+            $total = count($products);
+            return view('user.products.'.$type ,['products' => $products, 'total' => $total]);
             }
         }
 

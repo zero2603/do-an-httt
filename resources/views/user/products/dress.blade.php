@@ -115,7 +115,7 @@
                             <div class="product-topbar d-flex align-items-center justify-content-between">
                                 <!-- Total Products -->
                                 <div class="total-products">
-                                    <p><span>186</span> products found</p>
+                                    <p><span>{{$total}}</span> products found</p>
                                 </div>
                                 <!-- Sorting -->
                                 <div class="product-sorting d-flex">

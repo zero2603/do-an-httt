@@ -52,11 +52,24 @@
 }
 
 .row.comment {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     margin-top: 10px;
 }
 
 .reply {
     border-left: solid 5px #2c3e50;
     padding-left: 10px;
+    margin-left: -15px;
+    margin-top: 30px;
+}
+
+.comment_user_avatar {
+    width: 100%;
+    max-width: 100px;
+    object-fit: cover;
+}
+
+.btn-delete-comment {
+    background-color: none;
+    border: none;
 }

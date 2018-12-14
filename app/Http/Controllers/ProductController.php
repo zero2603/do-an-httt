@@ -93,9 +93,7 @@ class ProductController extends Controller
                     ->get();
         $parents = [];
         $children = [];
-        $totalRating = 0;
         foreach($comments as $comment) {
-            $totalRating += (int) $comment->rating; 
             // if parent_comment_id is null, comment is parent
             if(!$comment->parent_comment_id) {
                 array_push($parents, $comment);
@@ -114,14 +112,12 @@ class ProductController extends Controller
         }
 
         $num_of_comments = count($comments);
-        $avg_rating = $num_of_comments ? $totalRating / (float) $num_of_comments : 0;
 
         return view('user.products.detail', [
             'product' => $product, 
             'current_stock' => $current_stock,
             'comments' => $parents,
-            'num_of_comments' => $num_of_comments,
-            'avg_rating' => $avg_rating
+            'num_of_comments' => $num_of_comments
         ]);
     }
 

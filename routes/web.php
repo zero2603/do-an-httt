@@ -38,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user/profile','ProfileController@index');
 
     Route::post('/comment','CommentController@create');
+    
 });
 
 // routes admin
@@ -64,6 +65,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // product images
     Route::post('/admin/product/images/upload', 'Admin\ProductController@addImage');
     Route::delete('/admin/product/images/remove/{id}', 'Admin\ProductController@removeImage');
+
+    // comment
+    Route::delete('/admin/comment/{id}','Admin\CommentController@destroy');
 });
 
 Route::get('/{productType}','ProductController@getSubProduct');

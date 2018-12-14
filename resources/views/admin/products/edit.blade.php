@@ -177,7 +177,7 @@
                                     <div class="col-md-2">
                                         <img src="{{url('/')."/".$comment->user_avatar}}" class="comment_user_avatar"/>
                                     </div>
-                                    <div class="col-md-10">
+                                    <div class="col-md-9">
                                         <div><b>{{$comment->user_first_name}} {{$comment->user_last_name}}</b></div>
                                         <div>{{$comment->rating}} <i class="fa fa-star"></i>   {{$comment->created_at}}</div> 
                                         <div>{{$comment->content}}</div>
@@ -188,14 +188,32 @@
                                                     <div class="col-md-2">
                                                         <img src="{{url('/')."/".$item->user_avatar}}" class="comment_user_avatar"/>
                                                     </div>
-                                                    <div class="col-md-10">
+                                                    <div class="col-md-9">
                                                         <div><b>{{$item->user_first_name}} {{$item->user_last_name}}</b></div>
                                                         <div>{{$item->rating}} <i class="fa fa-star"></i>   {{$item->created_at}}</div> 
                                                         <div>{{$item->content}}</div>
                                                     </div>
+                                                    <div class="col-md-1">
+                                                        <form method="POST" action="{{url('/admin/comment')}}/{{$item->id}}">
+                                                            @method('DELETE')
+                                                            @csrf
+                                                            <button class="btn-delete-comment" type="submit"  onclick="return confirm('Are you sure?')">
+                                                                <i class="fa fa-times"></i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             @endforeach
                                         </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <form method="POST" action="{{url('/admin/comment')}}/{{$comment->id}}">
+                                            @method('DELETE')
+                                            @csrf
+                                            <button class="btn-delete-comment" type="submit">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             @endforeach

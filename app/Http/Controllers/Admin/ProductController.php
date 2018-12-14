@@ -225,6 +225,7 @@ class ProductController extends Controller
         $product->delete();
         DB::table('product_category')->where('product_id', '=', $id)->delete();
         DB::table('stock')->where('product_id', '=', $id)->delete();
+        Comment::where('product_id', '=', $id)->delete();
         return redirect('admin/products');
     }
 

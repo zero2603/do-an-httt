@@ -20,9 +20,6 @@
             <div class="single_product_desc clearfix">
                 <span></span>
                 <h2>{{$product->product_name}}</h2>
-                <div>
-                    <span>{{$avg_rating}}</span> <i class="fa fa-star fa-2x"></i>
-                </div>
 
                 <p class="product-price" id="productPrice">{{$product->selling_price}} VND</p>
                 <p class="product-desc">{!!$product->description!!}</p>
@@ -75,11 +72,13 @@
                             </div>
                             <div class="col-md-10">
                                 <div><b>{{$comment->user_first_name}} {{$comment->user_last_name}}</b></div>
-                                <div>{{$comment->rating}} <i class="fa fa-star"></i>   {{$comment->created_at}}</div> 
+                                <div>Vào lúc {{$comment->created_at}}</div> 
                                 <div>{{$comment->content}}</div>
-                                <div class="mt-2" id="btn-reply-{{$comment->id}}">
-                                    <a href="javascript:void(0);" onclick="reply({{$comment->id}});">Trả lời</a>
-                                </div>
+                                @if (Auth::id())
+                                    <div class="mt-2" id="btn-reply-{{$comment->id}}">
+                                        <a href="javascript:void(0);" onclick="reply({{$comment->id}});">Trả lời</a>
+                                    </div>
+                                @endif
                                 {{-- reply --}}
                                 <div class="reply">
                                     @foreach ($comment->reply as $item)
@@ -89,7 +88,7 @@
                                             </div>
                                             <div class="col-md-10">
                                                 <div><b>{{$item->user_first_name}} {{$item->user_last_name}}</b></div>
-                                                <div>{{$item->rating}} <i class="fa fa-star"></i>   {{$item->created_at}}</div> 
+                                                <div>Vào lúc {{$item->created_at}}</div> 
                                                 <div>{{$item->content}}</div>
                                             </div>
                                         </div>
@@ -105,13 +104,8 @@
                                 @csrf
                                 <input type="hidden" value="{{Auth::id()}}" name="data[user_id]"/>
                                 <input type="hidden" value="{{$product->id}}" name="data[product_id]"/>
-                                <input type="hidden" name="data[rating]" id="rating-input" value="5"/>
                                 <input type="hidden" name="data[parent_comment_id]" id="parent_comment_id"/>
-                                <div class="mt-2">
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        <i class="fas fa-star fa-2x star-rating selected" onclick="rate({{$i}})" id="rating-{{$i}}"></i>
-                                    @endfor
-                                </div>
+                                
                                 <div class="form-group mt-2">
                                     <textarea class="form-control" placeholder="Viết bình luận của bạn..." name="data[content]"></textarea>
                                 </div>
@@ -132,8 +126,6 @@
         var product_id = {{$product->id}};
         var color = document.getElementById('productColor');
         var size = document.getElementById('productSize');
-        var rating = document.getElementById('rating-input');
-        var ratingStars = Array.prototype.slice.call(document.getElementsByClassName("star-rating"));
         var commentForm = document.getElementById("new-comment");
 
         function changeSize() {
@@ -171,22 +163,6 @@
                     }
                 });
             });
-        }
-        
-        function rate(i) {
-            console.log(i);
-            rating.value = i;
-
-            ratingStars.map((item, index) => {
-                console.log(index)
-                if(index + 1 <= i) {
-                    item.classList.remove("far");
-                    item.classList.add("selected", "fas");
-                } else {
-                    item.classList.remove("selected", "fas");
-                    item.classList.add("far");
-                }
-            })
         }
 
         function reply(i) {

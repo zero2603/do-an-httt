@@ -19,18 +19,51 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products =  Product::paginate(8);
-        foreach($products as $product) {
-            $attribute = Stock::where('product_id', '=', $product->id)->orderBy('selling_price', 'ASC')->first();
-            $product->attribute = $attribute;
+        $products = [];
+        $product_ids = [];
+        if(!isset($_GET['color'])) {
+            $products =  Product::paginate(8);
+            foreach($products as $product) {
+                $attribute = Stock::where('product_id', '=', $product->id)->orderBy('selling_price', 'ASC')->first();
+                $product->attribute = $attribute;
 
-            $image = DB::table('product_images')->where('product_id', '=', $product->id)->value('source');
-            $product->image = $image; 
+                $image = DB::table('product_images')->where('product_id', '=', $product->id)->value('source');
+                $product->image = $image; 
 
-            $selling_price = DB::table('stock')->where('product_id', '=', $product->id)->value('selling_price');
-            $product->selling_price = $selling_price;          
-        }
+                $selling_price = DB::table('stock')->where('product_id', '=', $product->id)->value('selling_price');
+                $product->selling_price = $selling_price;          
+            }
         return view('user.products.index', ['products' => $products]);
+        } else {
+            $color_id = DB::table('colors')->where('name', '=', $_GET['color'])->get();
+            if(isset($color_id[0])) {
+                $collection = DB::table('stock')->where('color_id', '=', $color_id[0]->id)->get();
+                foreach ($collection as $product) {
+                   $product_ids[] = $product->product_id;
+                }
+                $product_ids = array_unique($product_ids);
+                foreach ($product_ids as $product_id) {
+                    $products[] = DB::table('products')->where('id', '=', $product_id)->get();
+                }
+                foreach($products as $product) {
+                    
+                    $attribute = Stock::where('product_id', '=', $product[0]->id)->orderBy('selling_price', 'ASC')->first();
+                    $product->attribute = $attribute;
+
+                    $image = DB::table('product_images')->where('product_id', '=', $product[0]->id)->value('source');
+                    $product->image = $image; 
+
+                    $selling_price = DB::table('stock')->where('product_id', '=', $product[0]->id)->value('selling_price');
+                    $product->selling_price = $selling_price;          
+                }
+                
+            }
+            // print_r($products[0]);die();
+            unset($_GET['color']);
+            return view('user.products.filterProduct', ['products' => $products]);
+        }
+            
+        
     }
 
     /**
@@ -169,22 +202,25 @@ class ProductController extends Controller
 
 
     public function getSubProduct($type) {
-        $category_id = DB::table('categories')->where('name', '=', $type)->get();
-        if (isset($category_id[0])) {
-            $product_ids = DB::table('product_category')->where('category_id','=',$category_id[0]->id)->get();
+        if($type != 'product') {
+            $category_id = DB::table('categories')->where('name', '=', $type)->get();
             $products = [];
-            // print_r($product_ids);die();
-            foreach ($product_ids as $product_id) {
-                $product = DB::table('products')->where('id','=',$product_id->product_id)->get();
-                $selling_price = DB::table('stock')->where('product_id', '=', $product[0]->id)->value('selling_price');
-                $image = DB::table('product_images')->where('product_id', '=', $product[0]->id)->value('source');
-                $product[0]->selling_price = $selling_price;
-                $product[0]->image = $image;
-                $products[] = $product[0];
+            if (isset($category_id[0])) {
+                $product_ids = DB::table('product_category')->where('category_id','=',$category_id[0]->id)->get();
+                
+                // print_r($product_ids);die();
+                foreach ($product_ids as $product_id) {
+                    $product = DB::table('products')->where('id','=',$product_id->product_id)->get();
+                    $selling_price = DB::table('stock')->where('product_id', '=', $product[0]->id)->value('selling_price');
+                    $image = DB::table('product_images')->where('product_id', '=', $product[0]->id)->value('source');
+                    $product[0]->selling_price = $selling_price;
+                    $product[0]->image = $image;
+                    $products[] = $product[0];
+                }
+            }
+            return view('user.products.'.$type ,['products' => $products]);
             }
         }
-        return view('user.products.'.$type ,['products' => $products]);
-    }
 
 
 }

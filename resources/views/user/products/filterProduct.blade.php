@@ -125,8 +125,8 @@
                                 <!-- Product Description -->
                                 <div class="product-description">
                                     <span>
-                                        <a href="/products/{{$product->id}}">
-                                            <h6>{{$product->product_name}}</h6>
+                                        <a href="/products/{{$product[0]->id}}">
+                                            <h6>{{$product[0]->product_name}}</h6>
                                         </a>
                                     </span>
                                     <p class="product-price">{{$product->selling_price}} <span>VND</span></p>
@@ -145,9 +145,7 @@
                     </div>
                 </div>
                 <!-- Pagination -->
-                <nav aria-label="navigation">
-                    {{ $products->links() }}
-                </nav>
+                
             </div>
         </div>
     </div>

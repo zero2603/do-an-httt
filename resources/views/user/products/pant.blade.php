@@ -59,16 +59,16 @@
                         <p class="widget-title2 mb-30">Color</p>
                         <div class="widget-desc">
                             <ul class="d-flex">
-                                <li><a href="/products?color=Blue" class="color4" id="Blue" ></a></li>
-                                <li><a href="/products?color=Gray" class="color2" id="Gray" ></a></li>
-                                <li><a href="/products?color=Black" class="color3" id="Black" ></a></li>
-                                <li><a href="/products?color=White" class="color1" id="White" ></a></li>
-                                <li><a href="/products?color=Pink" class="color5" id="Pink" ></a></li>
-                                <li><a href="/products?color=Yellow" class="color6" id="Yellow" ></a></li>
-                                <li><a href="/products?color=Orange" class="color7" id="Orange" ></a></li>
-                                <li><a href="/products?color=Brown" class="color8" id="Brown" ></a></li>
-                                <li><a href="/products?color=Green" class="color9" id="Green" ></a></li>
-                                <li><a href="/products?color=Purple" class="color10" id="Purple" ></a></li>
+                                <li><a href="/products?color=Blue" class="color4" id="Blue" style="border-radius: 50%;" ></a></li>
+                                <li><a href="/products?color=Gray" class="color2" id="Gray" style="border-radius: 50%;"></a></li>
+                                <li><a href="/products?color=Black" class="color3" id="Black" style="border-radius: 50%;"></a></li>
+                                <li><a href="/products?color=White" class="color1" id="White" style="border-radius: 50%;"></a></li>
+                                <li><a href="/products?color=Pink" class="color5" id="Pink" style="border-radius: 50%;"></a></li>
+                                <li><a href="/products?color=Yellow" class="color6" id="Yellow" style="border-radius: 50%;"></a></li>
+                                <li><a href="/products?color=Orange" class="color7" id="Orange" style="border-radius: 50%;"></a></li>
+                                <li><a href="/products?color=Brown" class="color8" id="Brown" style="border-radius: 50%;"></a></li>
+                                <li><a href="/products?color=Green" class="color9" id="Green" style="border-radius: 50%;"></a></li>
+                                <li><a href="/products?color=Purple" class="color10" id="Purple" style="border-radius: 50%;"></a></li>
                             </ul>
                         </div>
                     </div>
@@ -91,7 +91,7 @@
                                     <p>Sort by:</p>
                                     <form action="#" method="get">
                                         <select name="select" id="sortByselect">
-                                            <option value="value">Highest Rated</option>
+                                            <!-- <option value="value">Highest Rated</option> -->
                                             <option value="value">Newest</option>
                                             <option value="value">Price: $$ - $</option>
                                             <option value="value">Price: $ - $$</option>
@@ -152,6 +152,16 @@
         </div>
     </div>
 </section>
-<!-- ##### Shop Grid Area End ##### -->
+<script type="text/javascript">
+    var color = location.search.split('color=')[1];
+    document.getElementById(color).style.removeProperty('border-radius');
+    document.getElementById(color).setAttribute('style','border:2px solid brown');
+    if(color != 'White') {
+        var htmlData = "<h5>Color: <span style='font-weight:bold;color:"+color+"'> "+ color + "</span></h5>";
+    } else {
+        var htmlData = "<h5>Color: <span style='font-weight:bold;'> ("+ color + ")</span></h5>";
+    }
+    document.getElementById('color-select').innerHTML= htmlData;
+</script>
 
 @endsection

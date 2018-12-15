@@ -52,24 +52,7 @@
                         </div>
                     </div>
 
-                    <!-- ##### Single Widget ##### -->
-                    <div class="widget price mb-50">
-                        <!-- Widget Title -->
-                        <h6 class="widget-title mb-30">Filter by</h6>
-                        <!-- Widget Title 2 -->
-                        <p class="widget-title2 mb-30">Price</p>
-
-                        <div class="widget-desc">
-                            <div class="slider-range">
-                                <div data-min="49" data-max="360" data-unit="$" class="slider-range-price ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" data-value-min="49" data-value-max="360" data-label-result="Range:">
-                                    <div class="ui-slider-range ui-widget-header ui-corner-all"></div>
-                                    <span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0"></span>
-                                    <span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0"></span>
-                                </div>
-                                <div class="range-price">Range: $49.00 - $360.00</div>
-                            </div>
-                        </div>
-                    </div>
+                   
 
                     <!-- ##### Single Widget ##### -->
                     <div class="widget color mb-50">
@@ -77,34 +60,21 @@
                         <p class="widget-title2 mb-30">Color</p>
                         <div class="widget-desc">
                             <ul class="d-flex">
-                                <li><a href="#" class="color1"></a></li>
-                                <li><a href="#" class="color2"></a></li>
-                                <li><a href="#" class="color3"></a></li>
-                                <li><a href="#" class="color4"></a></li>
-                                <li><a href="#" class="color5"></a></li>
-                                <li><a href="#" class="color6"></a></li>
-                                <li><a href="#" class="color7"></a></li>
-                                <li><a href="#" class="color8"></a></li>
-                                <li><a href="#" class="color9"></a></li>
-                                <li><a href="#" class="color10"></a></li>
+                                <li><a href="/products?color=Blue" class="color4" id="Blue" style="border-radius: 50%;" ></a></li>
+                                <li><a href="/products?color=Gray" class="color2" id="Gray" style="border-radius: 50%;"></a></li>
+                                <li><a href="/products?color=Black" class="color3" id="Black" style="border-radius: 50%;"></a></li>
+                                <li><a href="/products?color=White" class="color1" id="White" style="border-radius: 50%;"></a></li>
+                                <li><a href="/products?color=Pink" class="color5" id="Pink" style="border-radius: 50%;"></a></li>
+                                <li><a href="/products?color=Yellow" class="color6" id="Yellow" style="border-radius: 50%;"></a></li>
+                                <li><a href="/products?color=Orange" class="color7" id="Orange" style="border-radius: 50%;"></a></li>
+                                <li><a href="/products?color=Brown" class="color8" id="Brown" style="border-radius: 50%;"></a></li>
+                                <li><a href="/products?color=Green" class="color9" id="Green" style="border-radius: 50%;"></a></li>
+                                <li><a href="/products?color=Purple" class="color10" id="Purple" style="border-radius: 50%;"></a></li>
                             </ul>
                         </div>
                     </div>
 
-                    <!-- ##### Single Widget ##### -->
-                    <div class="widget brands mb-50">
-                        <!-- Widget Title 2 -->
-                        <p class="widget-title2 mb-30">Brands</p>
-                        <div class="widget-desc">
-                            <ul>
-                                <li><a href="#">Asos</a></li>
-                                <li><a href="#">Mango</a></li>
-                                <li><a href="#">River Island</a></li>
-                                <li><a href="#">Topshop</a></li>
-                                <li><a href="#">Zara</a></li>
-                            </ul>
-                        </div>
-                    </div>
+                   
                 </div>
             </div>
 
@@ -115,14 +85,14 @@
                             <div class="product-topbar d-flex align-items-center justify-content-between">
                                 <!-- Total Products -->
                                 <div class="total-products">
-                                    <p><span>186</span> products found</p>
+                                    <p><span>{{$total}}</span> products found</p>
                                 </div>
                                 <!-- Sorting -->
                                 <div class="product-sorting d-flex">
                                     <p>Sort by:</p>
                                     <form action="#" method="get">
                                         <select name="select" id="sortByselect">
-                                            <option value="value">Highest Rated</option>
+                                            <!-- <option value="value">Highest Rated</option> -->
                                             <option value="value">Newest</option>
                                             <option value="value">Price: $$ - $</option>
                                             <option value="value">Price: $ - $$</option>
@@ -192,6 +162,16 @@
         </div>
     </div>
 </section>
-<!-- ##### Shop Grid Area End ##### -->
+<script type="text/javascript">
+    var color = location.search.split('color=')[1];
+    document.getElementById(color).style.removeProperty('border-radius');
+    document.getElementById(color).setAttribute('style','border:2px solid brown');
+    if(color != 'White') {
+        var htmlData = "<h5>Color: <span style='font-weight:bold;color:"+color+"'> "+ color + "</span></h5>";
+    } else {
+        var htmlData = "<h5>Color: <span style='font-weight:bold;'> ("+ color + ")</span></h5>";
+    }
+    document.getElementById('color-select').innerHTML= htmlData;
+</script>
 
 @endsection

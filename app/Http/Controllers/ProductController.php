@@ -21,6 +21,7 @@ class ProductController extends Controller
     {
         $products = [];
         $product_ids = [];
+        $total;
         if(!isset($_GET['color'])) {
             $products =  Product::paginate(8);
             foreach($products as $product) {
@@ -57,8 +58,9 @@ class ProductController extends Controller
                     $selling_price = DB::table('stock')->where('product_id', '=', $product[0]->id)->value('selling_price');
                     $product->selling_price = $selling_price;          
                 }
-                $total = count($products);
+               
             }
+             $total = count($products);
             // print_r($products[0]);die();
             unset($_GET['color']);
             return view('user.products.filterProduct', ['products' => $products, 'total' => $total] );
@@ -182,6 +184,7 @@ class ProductController extends Controller
     }
 
     public function search() {
+        $total;
         if(isset($_GET['search'])) {
             $query =$_GET['search'];
 
@@ -196,7 +199,8 @@ class ProductController extends Controller
             $selling_price = DB::table('stock')->where('product_id', '=', $product->id)->value('selling_price');
             $product->selling_price = $selling_price;          
         }
-        return view('user.products.search', ['products' => $products]);
+        $total=count($products);
+        return view('user.products.search', ['products' => $products, 'total'=>$total]);
         }
         
     }
@@ -206,6 +210,7 @@ class ProductController extends Controller
         if($type != 'product') {
             $category_id = DB::table('categories')->where('name', '=', $type)->get();
             $products = [];
+            $total;
             if (isset($category_id[0])) {
                 $product_ids = DB::table('product_category')->where('category_id','=',$category_id[0]->id)->get();
                 

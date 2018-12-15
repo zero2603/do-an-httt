@@ -19,7 +19,7 @@
             @foreach($orders as $order)
             <tr>
                 <td>
-                    <a href="{{url('admin/order/'.$order->id)}}">
+                    <a href="{{url('admin/orders/'.$order->id)}}">
                         {{$order->id}}
                     </a>
                 </td>

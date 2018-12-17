@@ -107,7 +107,7 @@
                                 <input type="hidden" name="data[parent_comment_id]" id="parent_comment_id"/>
                                 
                                 <div class="form-group mt-2">
-                                    <textarea class="form-control" placeholder="Viết bình luận của bạn..." name="data[content]"></textarea>
+                                    <textarea class="form-control" placeholder="Viết bình luận của bạn..." name="data[content]" required></textarea></textarea>
                                 </div>
                                 <button class="btn btn-primary float-right">Gửi</button>
                             </form>

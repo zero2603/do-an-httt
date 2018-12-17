@@ -1,64 +1,89 @@
 @extends('layouts.main')
 
 @section('content-profile')
-	<div>
-        <div align="center">
+	<div class="container mt-4 mb-4">
+        <div class="text-center">
              <span><h2>Edit Profile</h2></span>
         </div>
-       <form action="/user/profile" method="POST">
-            <div align="center">
-            <div>
-                First Name: <input type="text" name="first_name" value="{{$user->first_name}}" required>
-            </div><br>
-            <div>
-                Last name: <input type="text" name="last_name" value="{{$user->last_name}}" required>
-            </div><br>
-            <div>
-                Photo: <input type="file" name="photo" value="{{$user->photo}}">
-            </div><br>
-            <div>
-                Email: <input type="email" name="email" value="{{$user->email}}" required>
-            </div><br>
-            <div>
-                Password: <input id="password" type="password" name="password" value="{{$user->password}}" required>
-            </div><br>
-            <div>
-                Confirm Password: <input id="confirmPassword" type="password" name="password" value="{{$user->password}}" required>
-            </div><br>
-            <div>
-                Phone: <input id="phone" type="number" name="phone_number" value="{{$user->phone_number}}" required>
-            </div><br>
-            <div align="center" style="margin-left: 50%">
-               
-                <select>
-                    <option>Male</option>
-                    <option>Female</option>
-                </select><br>
-            </div><br>
-            <div>
-                Address: <input type="text" name="address1" value="{{$user->address1}}" required>
-            </div><br>
-            <div>
-                Town City: <input type="text" name="town_city" value="{{$user->town_city}}" required>
-            </div><br>
-            <div>
-                County: <input type="text" name="county" value="{{$user->county}}" required>
-            </div><br>
-            <div>
-                Country: <input type="text" name="country" value="{{$user->country}}" required>
-            </div><br>
-            <div align="center">
-                <button type="submit"  id="submit" name="submit" style="border-radius: 30px; border: none; padding: 20px">Save Profile</button>
-            </div><br>
-        </div>
-       </form>   
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <form action="/user/profile" method="POST">
+                        <div class="form-group row">
+                            <div class="col-6">
+                                <div class="row">
+                                    <label class="col-4">Họ:</label>
+                                    <input class="form-control col-8" type="text" name="first_name" value="{{$user->first_name}}" required>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="row">
+                                    <label class="col-4">Tên:</label>
+                                    <input class="form-control col-8" type="text" name="last_name" value="{{$user->last_name}}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-4">Email:</label>
+                            <input class="form-control col-8" type="email" name="email" value="{{$user->email}}" required>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-4">Số điện thoại:</label>
+                            <input class="form-control col-8" id="phone" type="number" name="phone_number" value="{{$user->phone_number}}" required>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-4">Giới tính:</label>
+                            <select class="custom-select col-8">
+                                <option value="M" selected="{{$user->gender == "M"}}">Nam</option>
+                                <option value="F" selected="{{$user->gender == "F"}}">Nữ</option>
+                            </select>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-4">Địa chỉ 1:</label>
+                            <input class="form-control col-8" type="text" name="address1" value="{{$user->address1}}" required>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-4">Địa chỉ 2:</label>
+                            <input class="form-control col-8" type="text" name="address2" value="{{$user->address2}}" required>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-4">Xã/Phường/Thị trấn:</label>
+                            <input class="form-control col-8" type="text" name="town_city" value="{{$user->town_city}}" required>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-4">Quận/Huyện:</label>
+                            <input class="form-control col-8" type="text" name="county" value="{{$user->county}}" required>
+                        </div>
+                        <div class="form-group row"> 
+                            <label class="col-4">Quốc gia:</label>
+                            <input class="form-control col-8" type="text" name="country" value="{{$user->country}}" required>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit"  id="submit" name="submit" style="border-radius: 30px; border: none; padding: 20px">Save Profile</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="row">
+                        <div class="col-6">
+                            <img src="{{url('/').'/'.$user->avatar}}"/>
+                        </div>
+                        <div class="col-6">
+                            <label id="change-avatar-btn">
+                                Đổi avatar
+                                <input type="file" class="d-none" name="avatar" />
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mt-4">
+                    <button id="change-password-btn">
+                        <i class="fa fa-lock"></i> Đổi mật khẩu
+                    </button>
+                </div>    
+            </div>
+        </div>  
     </div>
-<script>
-    var password = window.document.getElementById('password').value;
-    var confirmPassword = window.document.getElementById('confirmPassword').value;
-    if (password != confirmPassword) {
-        window.document.getElementById('submit').disabled = true;
-    } else {
-        window.document.getElementById('submit').disabled = false;
-    }
-</script>
+@endsection

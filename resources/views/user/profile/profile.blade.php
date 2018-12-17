@@ -23,7 +23,7 @@
 
         
         <div style="width: 30%">
-        	<img src="../assets/img/anonymous.jpg" width="200px" height="100%" class="cangiua">
+            <img src="{{url('/').'/'.$user->avatar}}" width="200px" height="100%" class="cangiua">
         </div>
         
 
@@ -36,8 +36,7 @@
                 <p><span>Địa chỉ:</span>{{$user->info}}</p>
                 <p><span>Số điện thoại:</span>{{$user->phone_number}}</p>
                 <p><span>Tài khoản (email):</span>{{$user->email}}</p>
-                <p><span>Mật khẩu:</span>{{$user->password}}</p>
-                <div align="center">
+                <div class="text-center">
                     <a href="/user/profile/edit"><button  style="border-radius: 30px; border: none; padding: 20px">Chỉnh sửa thông tin</button></a>
                 </div>
             </div>

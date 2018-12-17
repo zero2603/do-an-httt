@@ -77,35 +77,38 @@
                 </div>
                 <!-- User Login Info -->
                 <div class="user-login-info icon">
-                    <a href="/user/profile" id="account-menu-icon">
+                    <a href="javascript:void(0);" id="account-menu-icon">
                         <img src="../../assets/img/core-img/user.svg" alt="">
                     </a>
                     <div class="d-none" id="account-menu">
                         @guest
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Đăng nhập') }}</a>
-                            </li>
-                            <li class="nav-item">
-                                @if (Route::has('register'))
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Đăng ký') }}</a>
-                                @endif
-                            </li>
+                            <ul>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Đăng nhập') }}</a>
+                                </li>
+                                <li class="nav-item">
+                                    @if (Route::has('register'))
+                                        <a class="nav-link" href="{{ route('register') }}">{{ __('Đăng ký') }}</a>
+                                    @endif
+                                </li>
+                            </ul>
                         @else
-                            <li>
-                                <a>Profile cá nhân</a>
-                            </li>
-                            <li>
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault();
-                                                  document.getElementById('logout-form').submit();">
-                                     {{ __('Đăng xuất') }}
-                                 </a>
+                            <ul>
+                                <li>
+                                    <a href="/user/profile">Profile cá nhân</a>
+                                </li>
+                                <li>
+                                        <a class="dropdown-item" href="{{ route('logout') }}"
+                                        onclick="event.preventDefault();
+                                                    document.getElementById('logout-form').submit();">
+                                        {{ __('Đăng xuất') }}
+                                    </a>
 
-                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                     @csrf
-                                 </form>
-                            </li>
-                        
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+                                </li>
+                            </ul>
                         @endguest
                     </div>
                 </div>
@@ -251,7 +254,7 @@
 
     <script>
         var rootUrl = "{{url('/')}}";
-        var element = document.getElementById('account-menu-icon');
+        var accountIcon = document.getElementById('account-menu-icon');
         var menu = document.getElementById('account-menu');
         var cart = document.getElementById("cart-list-items");
 
@@ -259,6 +262,10 @@
 
         var subtotal = document.getElementById("subtotal");
         var total = document.getElementById("total");
+
+        accountIcon.onclick = function() {
+            document.getElementById("account-menu").classList.toggle("d-none");
+        }
 
         $(document).ready(function(){
             $.ajax({

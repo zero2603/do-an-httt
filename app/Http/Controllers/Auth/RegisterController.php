@@ -71,7 +71,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'gender' => $data['gender'],
-            'photo' => ''
+            'avatar' => 'assets/img/avatar-default.png'
         ]);
     }
 }

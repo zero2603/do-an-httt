@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/checkout', "CheckoutController@checkout");
 
     Route::get('/user/profile','ProfileController@index');
+    Route::get('/user/profile/edit','ProfileController@edit');
 
     Route::post('/comment','CommentController@create');
     

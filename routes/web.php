@@ -37,6 +37,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/user/profile','ProfileController@index');
     Route::get('/user/profile/edit','ProfileController@edit');
+    Route::post('/user/profile/update','ProfileController@update');
+    Route::post('/user/profile/update-avatar','ProfileController@updateAvatar');
+    Route::post('/user/profile/update-password','ProfileController@updatePassword');
 
     Route::post('/comment','CommentController@create');
     

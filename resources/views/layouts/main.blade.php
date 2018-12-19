@@ -95,6 +95,9 @@
                         @else
                             <ul>
                                 <li>
+                                    <a href="/orders">Đơn hàng của bạn</a>
+                                </li>
+                                <li>
                                     <a href="/user/profile">Profile cá nhân</a>
                                 </li>
                                 <li>

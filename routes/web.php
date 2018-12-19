@@ -43,6 +43,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/comment','CommentController@create');
     
+    Route::get('/orders', "OrderController@index");
+    Route::get('/orders/{id}', "OrderController@show");
 });
 
 // routes admin

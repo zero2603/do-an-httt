@@ -34,10 +34,10 @@ class ProfileController extends Controller
 
 	function updateAvatar(Request $request) {
 		$user = Auth::user();
-		$image = $request->avatar;
-		$file = Storage::disk('local')->put('/public/images', $image);
+		$path = $request->avatar->store('/public/images');
+		// $file = Storage::disk('local')->put('/public/images', $image);
 
-		$user->avatar = 'storage/images/'.baseName($file);
+		$user->avatar = 'storage/images/'.baseName($path);
 		$user->save();
 		return redirect('/user/profile');
 	}

@@ -23,7 +23,7 @@
                     <h5 class="card-title">Thông tin giao hàng</h5>
 
                     <div class="checkout_details_area mt-50 clearfix">
-                    <form method="POST" action="{{url('/checkout')}}" novalidate>
+                    <form method="POST" action="{{url('/checkout')}}">
                         @csrf
                         <div class="form-group">
                             <label>Họ tên người nhận hàng</label>
@@ -61,8 +61,8 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="form-group d-none" id="other_payment_info">
-                            <label>Thông tin thẻ ATM</label>
+                        <div class="form-group" id="other_payment_info">
+                            <label>Thông tin thẻ ATM (Bắt buộc khi chọn thanh toán qua thẻ ATM)</label>
                             <textarea class="form-control" name='other_payment_info' id="card-info"></textarea>
                         </div>
                         <button class="btn btn-primary float-right" type="submit">
@@ -111,13 +111,11 @@
 
 <script>
 function showOtherInfo() {
-    document.getElementById("other_payment_info").classList.remove("d-none");
     document.getElementById("card-info").setAttribute('required', "true");
 }
 
 function removeOtherInfo() {
-    document.getElementById("other_payment_info").classList.add("d-none");
-    document.getElementById("card-info").setAttribute('required', "false");
+    document.getElementById("card-info").removeAttribute('required');
 }
 </script>
 

@@ -72,7 +72,7 @@
                             <img src="{{url('/').'/'.$user->avatar}}"/>
                         </div>
                         <div class="col-6">
-                            <form method="POST" action="{{url('/user/profile/update-avatar')}}" id="change-avatar-form">
+                            <form method="POST" action="{{url('/user/profile/update-avatar')}}" id="change-avatar-form" enctype="multipart/form-data">
                                 @csrf
                                 <label id="change-avatar-btn">
                                     Đổi avatar

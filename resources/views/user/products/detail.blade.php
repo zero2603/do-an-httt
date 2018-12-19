@@ -68,7 +68,7 @@
                     @foreach ($comments as $comment)
                         <div class="row comment">
                             <div class="col-md-2">
-                                <img src="{{url('/')."/".$comment->user_avatar}}" width="100%"/>
+                                <img src="{{url('/')."/".$comment->user_avatar}}" class="avatar"/>
                             </div>
                             <div class="col-md-10">
                                 <div><b>{{$comment->user_first_name}} {{$comment->user_last_name}}</b></div>
@@ -84,7 +84,7 @@
                                     @foreach ($comment->reply as $item)
                                         <div class="row comment">
                                             <div class="col-md-2">
-                                                <img src="{{url('/')."/".$item->user_avatar}}" width="100%"/>
+                                                <img src="{{url('/')."/".$item->user_avatar}}" class="avatar"/>
                                             </div>
                                             <div class="col-md-10">
                                                 <div><b>{{$item->user_first_name}} {{$item->user_last_name}}</b></div>

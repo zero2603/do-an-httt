@@ -95,6 +95,6 @@ class UserController extends Controller
             $user->delete();
         } 
         
-        return redirect('admin/products');
+        return redirect('admin/users');
     }
 }

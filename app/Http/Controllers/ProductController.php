@@ -188,7 +188,8 @@ class ProductController extends Controller
         if(isset($_GET['search'])) {
             $query =$_GET['search'];
 
-         $products =  DB::table('products')->where('product_name', 'like', '%'.$query.'%')->paginate(9);
+
+         $products =  DB::table('products')->where('product_name', 'like', '%'.$query.'%')->orWhere('description', 'like', '%'.$query.'%')->paginate(9);
          foreach($products as $product) {
             $attribute = Stock::where('product_id', '=', $product->id)->orderBy('selling_price', 'ASC')->first();
             $product->attribute = $attribute;
@@ -201,6 +202,21 @@ class ProductController extends Controller
         }
         $total=count($products);
         return view('user.products.search', ['products' => $products, 'total'=>$total]);
+        }
+        if(isset($_GET['ajaxQuery'])) {
+            $query =$_GET['ajaxQuery'];
+            $products =  DB::table('products')->where('product_name', 'like', '%'.$query.'%')->orWhere('description', 'like', '%'.$query.'%')->limit(5)->get();
+            foreach($products as $product) {
+                $attribute = Stock::where('product_id', '=', $product->id)->orderBy('selling_price', 'ASC')->first();
+                $product->attribute = $attribute;
+
+                $image = DB::table('product_images')->where('product_id', '=', $product->id)->value('source');
+                $product->image = $image; 
+
+                $selling_price = DB::table('stock')->where('product_id', '=', $product->id)->value('selling_price');
+                $product->selling_price = $selling_price;          
+            }
+            return $products;
         }
         
     }

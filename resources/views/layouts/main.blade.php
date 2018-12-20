@@ -65,11 +65,16 @@
             <!-- Header Meta Data -->
             <div class="header-meta d-flex clearfix justify-content-end">
                 <!-- Search Area -->
-                <div class="search-area">
-                    <form action="/search" method="get">
-                        <input type="search" name="search" id="headerSearch" placeholder="Type for search">
-                        <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
-                    </form>
+                <div style="position: relative;">
+                    <div class="search-area">
+                        <form action="/search" method="get">
+                            <input type="search" name="search" id="headerSearch" placeholder="Type for search">
+                            <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                        </form>
+                    </div>
+                    <div id="suggest">
+                        
+                    </div>
                 </div>
                 <!-- Favourite Area -->
                 <div class="favourite-area icon">
@@ -95,9 +100,6 @@
                         @else
                             <ul>
                                 <li>
-                                    <a href="/orders">Đơn hàng của bạn</a>
-                                </li>
-                                <li>
                                     <a href="/user/profile">Profile cá nhân</a>
                                 </li>
                                 <li>
@@ -122,7 +124,9 @@
                         <span class="cart-items-number"></span>
                     </a>
                 </div>
+
             </div>
+            
 
         </div>
     </header>
@@ -382,7 +386,62 @@
         }
         
     </script>
+    <script>
+        $(document).ready(function(){
+            $('#headerSearch').on('keyup',function(){
+                if($('#headerSearch').val() != '' && $('#headerSearch').val() != ' ') {
+                    ajaxSearch();
+                }
+            })
+            if($('#headerSearch').val() != '' && $('#headerSearch').val() != ' ') {
+                    ajaxSearch();
+                }
+        });
+        function ajaxSearch() {
+
+                $.ajax({
+                    url: "/search",
+                    method: "GET",
+                    async: true,
+                    data: { ajaxQuery: $('#headerSearch').val()},
+                    success: function(response) {
+                        console.log(response.length);
+                        var htmlData='';
+                        if(response.length != 0) {
+                            if($('#headerSearch').val() != '' && $('#headerSearch').val() != ' ') {
+                                $.each(response, function(i) {
+                                    
+                                        document.getElementById('suggest').style.display = 'block';
+                                        htmlData+="<div style='padding:10px;font-size:15px;background-color:#F2F2F2;right:-16px;width:100%; position:relative;border-bottom:0.1px solid gray' class='row'><div ><a href='/products/"+response[i].id+"'>"+response[i].product_name+"</a></div><div style='position:absolute;right:10px;color:blue'>"+response[i].selling_price+"</div></div>";
+                                        $('#suggest').empty().html(htmlData);
+                                     
+                                });
+                            } else {
+                                document.getElementById('suggest').style.display = 'none';
+                            }
+                        } else {
+                            document.getElementById('suggest').style.display = 'none';
+                        }
+                    }
+                });
+            
+        }
+
+        window.onload = function() {
+            var hideSuggest = document.getElementById('suggest');
+            document.onclick = function(e) {
+                if(e.target.id !== 'suggest'){
+                    hideSuggest.style.display = 'none';
+                } 
+                if(e.target.id == 'headerSearch') {
+                    hideSuggest.style.display = 'block';
+                } 
+            };
+        };
+        
+    </script>
 
 </body>
 
 </html>
+

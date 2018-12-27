@@ -70,11 +70,9 @@
                 <div class="col-md-8">{{$order->other_payment_info}}</div>
             </div>
             <div class="form-group">
-                <form method="POST" action={{url('/admin/orders/'.$order->id)}}>
-                    @method('DELETE')
-                    {{ csrf_field() }}
-                    <button type="submit" class="btn btn-sm btn-danger">Xóa đơn hàng</button>
-                </form>
+                <button type="button" class="btn btn-sm btn-danger" onclick="remove({{$order->id}});">
+                    Xóa đơn hàng
+                </button>
             </div>
         </div>
         <div class="col-md-6">
@@ -108,8 +106,23 @@
                     </tr>
                 </tbody>
             </table>
+            <form method="POST" class="d-none" id="delete-order-form">
+                @method('DELETE')
+                {{ csrf_field() }}
+            </form>
         </div>
     </div>
 </div>
+
+<script>
+    var form = document.getElementById("delete-order-form");
+    function remove(id) {
+        let url = `{{url('/')}}/admin/orders/` + id;
+        if(confirm("Bạn có chắc chắn muốn xóa?")) {
+            form.setAttribute('action', url);
+            form.submit();
+        }
+    }
+</script>
 
 @endsection

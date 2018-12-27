@@ -11,6 +11,12 @@
 <hr/>
 
 <div>
+    @if (\Session::has('alert'))
+        <div class="alert alert-danger">
+                {!! \Session::get('alert') !!}
+        </div>
+    @endif
+
     <table class="table table-striped">
         <thead>
             <tr>
@@ -40,11 +46,9 @@
                             </a>
                         </div>
                         <div class="col-md-6">
-                            <form method="POST" action={{route('categories.destroy', $category->id)}}>
-                                @method('DELETE')
-                                {{ csrf_field() }}
-                                <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
-                            </form>
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="remove({{$category->id}});">
+                                Xóa
+                            </button>
                         </div>
                     </div>
                 </td>
@@ -52,8 +56,24 @@
             @endforeach
         </tbody>
     </table>
+
+    <form method="POST" class="d-none" id="delete-category-form">
+        @method('DELETE')
+        {{ csrf_field() }}
+    </form>
+
     {{ $categories->links() }}
 </div>
 
+<script>
+    var form = document.getElementById("delete-category-form");
+    function remove(id) {
+        let url = `{{url('/')}}/admin/categories/` + id;
+        if(confirm("Bạn có chắc chắn muốn xóa danh mục này?")) {
+            form.setAttribute('action', url);
+            form.submit();
+        }
+    }
+</script>
 
 @endsection

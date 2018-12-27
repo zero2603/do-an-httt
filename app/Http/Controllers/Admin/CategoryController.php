@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Category;
+use App\Product;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
@@ -102,8 +104,12 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category = Category::find($id);
-        $category->delete();
+        $temp = DB::table('product_category')->where('category_id', '=', $id)->get();
+        if(count($temp)) {
+            return redirect()->back()->with(['alert' => 'Không thể xóa danh mục đang có chứa sản phẩm']);
+        }
         
+        $category->delete();
         return redirect('admin/categories');
     }
 }

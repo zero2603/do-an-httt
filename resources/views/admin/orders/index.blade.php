@@ -45,11 +45,9 @@
                             </a>
                         </div>
                         <div class="col-md-6">
-                            <form method="POST" action={{url('/admin/orders/'.$order->id)}}>
-                                @method('DELETE')
-                                {{ csrf_field() }}
-                                <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
-                            </form>
+                            <button type="button" class="btn btn-sm btn-danger" onclick="remove({{$order->id}});">
+                                Xóa
+                            </button>
                         </div>
                     </div>
                 </td>
@@ -57,8 +55,24 @@
             @endforeach
         </tbody>
     </table>
+
+    <form method="POST" class="d-none" id="delete-order-form">
+        @method('DELETE')
+        {{ csrf_field() }}
+    </form>
+
     {{ $orders->links() }}
 </div>
 
+<script>
+    var form = document.getElementById("delete-order-form");
+    function remove(id) {
+        let url = `{{url('/')}}/admin/orders/` + id;
+        if(confirm("Bạn có chắc chắn muốn xóa?")) {
+            form.setAttribute('action', url);
+            form.submit();
+        }
+    }
+</script>
 
 @endsection

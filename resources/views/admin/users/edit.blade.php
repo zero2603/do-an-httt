@@ -29,7 +29,7 @@
                 </div>
                 <div class="col-md-6">
                     <label>Giới tính</label>
-                    <select class="form-control" name="gender" value={{$user->gender}} required>
+                    <select class="form-control" name="gender" required>
                         <option value="M" {{$user->gender=='M' ? 'selected' : ''}}>Nam</option>
                         <option value="F" {{$user->gender=='F' ? 'selected' : ''}}>Nữ</option>
                     </select>
@@ -73,7 +73,9 @@
 
 <script>
     function remove() {
-        document.getElementById("delete-user-form").submit();
+        if(confirm("Bạn có chắc chắn muốn xóa?")) {
+            document.getElementById("delete-user-form").submit();
+        }
     }
 </script>
 @endsection

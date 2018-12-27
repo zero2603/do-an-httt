@@ -5,6 +5,12 @@
     <h1 class="page-header">{{__('Sửa thông tin danh mục')}}</h1>
 
     <div>
+        @if (\Session::has('alert'))
+            <div class="alert alert-danger">
+                    {!! \Session::get('alert') !!}
+            </div>
+        @endif
+
         <form method="POST" action={{route('categories.update', $category->id)}}>
             @method('PUT')
             {{ csrf_field() }}
@@ -43,7 +49,9 @@
 
 <script>
     function remove() {
-        document.getElementById("delete-category-form").submit();
+        if(confirm("Bạn có chắc chắn muốn xóa danh mục này?")) {
+            document.getElementById("delete-category-form").submit();
+        }
     }
 </script>
 

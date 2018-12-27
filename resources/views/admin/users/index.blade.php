@@ -27,18 +27,31 @@
                 <td>{{$user->email}}</td>
                 <td>{{$user->gender}}</td>
                 <td>
-                    <form method="POST" action={{route('users.destroy', $user->id)}}>
-                        @method('DELETE')
-                        {{ csrf_field() }}
-                        <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
-                    </form>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="remove({{$user->id}});">
+                        Xóa
+                    </button>
                 </td>
             </tr>
             @endforeach
         </tbody>
     </table>
+    <form method="POST" id="delete-user-form" class="d-none">
+        @method('DELETE')
+        {{ csrf_field() }}
+    </form>
+
     {{ $users->links() }}
 </div>
 
+<script>
+    var form = document.getElementById("delete-user-form");
+    function remove(id) {
+        let url = `{{url('/')}}/admin/users/` + id;
+        if(confirm("Bạn có chắc chắn muốn xóa?")) {
+            form.setAttribute('action', url);
+            form.submit();
+        }
+    }
+</script>
 
 @endsection

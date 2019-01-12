@@ -13,9 +13,23 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::where('is_admin', 0)->paginate(10);
+        $query = $request->all();
+        unset($query['_token']);
+
+        if(array_key_exists ('name', $query)) {
+            $name = $query['name'];
+            unset($query['name']);
+            $users = User::where('is_admin', 0)
+                ->where($query)
+                ->where('first_name', 'LIKE', '%'.$name.'%')
+                ->orWhere('last_name', 'LIKE', '%'.$name.'%')
+                ->paginate(10);
+        } else {
+            $users = User::where('is_admin', 0)->where($query)->paginate(10);
+        }
+
         return view('admin.users.index', ['users' => $users]);
     }
 

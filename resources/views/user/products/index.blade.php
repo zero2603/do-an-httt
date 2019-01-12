@@ -25,53 +25,35 @@
 
                     <!-- ##### Single Widget ##### -->
                     <div class="widget catagory mb-50">
-                        <!-- Widget Title -->
-                        <h6 class="widget-title mb-30">Catagories</h6>
 
                         <!--  Catagories  -->
                         <div class="catagories-menu">
                             <ul id="menu-content2" class="menu-content collapse show">
                                 <!-- Single Item -->
-                                <li data-toggle="collapse" data-target="#clothing">
-                                    <a href="#">Categories</a>
-                                    <ul class="sub-menu collapse show" id="clothing">
-                                        <li><a href="/">All</a></li>
-                                        <li><a href="/dress">Dress</a></li>
-                                        
-                                        <li><a href="/jacket">Jacket</a></li>
-                                        <li><a href="/jeans">Jeans</a></li>
-                                        <li><a href="/pant">Pants &amp; Leggings</a></li>
-                                        
-                                        <li><a href="/shirt">Shirt &amp; Blouses</a></li>
-                                    </ul>
+                                <li>
+                                    <a>Danh mục</a>
+                                    <form>
+                                        <ul class="sub-menu collapse show" id="clothing-categories">
+                                        </ul>
+                                    </form>
                                 </li>
-                               
+                                <li>
+                                    <a>Màu sắc</a>
+                                    <form>
+                                        <ul class="sub-menu collapse show" id="clothing-colors">
+                                        </ul>
+                                    </form>
+                                </li>
+                                <li>
+                                    <a>Size</a>
+                                    <form>
+                                        <ul class="sub-menu collapse show" id="clothing-sizes">
+                                        </ul>
+                                    </form>
+                                </li>
                             </ul>
                         </div>
                     </div>
-
-
-                    <!-- ##### Single Widget ##### -->
-                    <div class="widget color mb-50">
-                        <!-- Widget Title 2 -->
-                        <p class="widget-title2 mb-30">Color</p>
-                        <div class="widget-desc">
-                            <ul class="d-flex">
-                                <li><a href="/products?color=Blue" class="color4" id="Blue" style="border-radius: 50%;" ></a></li>
-                                <li><a href="/products?color=Gray" class="color2" id="Gray" style="border-radius: 50%;"></a></li>
-                                <li><a href="/products?color=Black" class="color3" id="Black" style="border-radius: 50%;"></a></li>
-                                <li><a href="/products?color=White" class="color1" id="White" style="border-radius: 50%;"></a></li>
-                                <li><a href="/products?color=Pink" class="color5" id="Pink" style="border-radius: 50%;"></a></li>
-                                <li><a href="/products?color=Yellow" class="color6" id="Yellow" style="border-radius: 50%;"></a></li>
-                                <li><a href="/products?color=Orange" class="color7" id="Orange" style="border-radius: 50%;"></a></li>
-                                <li><a href="/products?color=Brown" class="color8" id="Brown" style="border-radius: 50%;"></a></li>
-                                <li><a href="/products?color=Green" class="color9" id="Green" style="border-radius: 50%;"></a></li>
-                                <li><a href="/products?color=Purple" class="color10" id="Purple" style="border-radius: 50%;"></a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    
                 </div>
             </div>
 
@@ -152,17 +134,73 @@
         </div>
     </div>
 </section>
-<script type="text/javascript">
-    var color = location.search.split('color=')[1];
-    document.getElementById(color).style.removeProperty('border-radius');
-    document.getElementById(color).setAttribute('style','border:2px solid brown');
-    if(color != 'White') {
-        var htmlData = "<h5>Color: <span style='font-weight:bold;color:"+color+"'> "+ color + "</span></h5>";
-    } else {
-        var htmlData = "<h5>Color: <span style='font-weight:bold;'> ("+ color + ")</span></h5>";
-    }
-    document.getElementById('color-select').innerHTML= htmlData;
-</script>
+<script>
+     var url = new URL(window.location.href);
+        var urlParams = new URLSearchParams(url.search.slice(1));
 
+    $(document).ready(function(){
+       
+
+        $.ajax({
+            url: "/categories",
+            method: "GET",
+            async: true,
+            success: function(response) {
+                response.categories.forEach(category => {
+                    $('#clothing-categories').append(
+                        `<li>
+                            <input type="checkbox" name="category_id" value="${category.id}" ${(urlParams.getAll('category_id').indexOf(category.id.toString()) >= 0) ? "checked" : ""} onclick="query(this);"/> ${category.name}
+                        </li>`
+                    );
+                })
+                
+            }
+        });
+
+        $.ajax({
+            url: "/colors",
+            method: "GET",
+            async: true,
+            success: function(response) {
+                response.colors.forEach(color => {
+                    $('#clothing-colors').append(
+                        `<li>
+                            <input type="checkbox" name="color_id" value="${color.id}" ${(urlParams.getAll('color_id').indexOf(color.id.toString()) >= 0) ? "checked" : ""} onclick="query(this);"/> ${color.name}
+                        </li>`
+                    );
+                })
+                
+            }
+        });
+
+        $.ajax({
+            url: "/sizes",
+            method: "GET",
+            async: true,
+            success: function(response) {
+                response.sizes.forEach(size => {
+                    $('#clothing-sizes').append(
+                        `<li>
+                            <input type="checkbox" name="size_id" value="${size.id}" ${(urlParams.getAll('size_id').indexOf(size.id.toString()) >= 0) ? "checked" : ""} onclick="query(this);"/> ${size.name}
+                        </li>`
+                    );
+                })
+                
+            }
+        });
+    });
+
+    function query(item) {
+        
+        if(item.checked) {
+            urlParams.append(item.name, item.value);
+        } else {
+            urlParams.delete(item.name, item.value);
+        }
+        
+        window.location.href = window.location.origin + '/?' + urlParams.toString();
+    }
+
+</script>
 
 @endsection

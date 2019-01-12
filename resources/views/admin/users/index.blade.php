@@ -5,6 +5,19 @@
 <h1 class="page-header">{{__('Tất cả người dùng')}}</h1>  
 
 <div>
+    <div>
+        <div class="input-group custom-search-form float-right">
+            <form method="GET" action={{route('users.index')}}>
+                @csrf
+                <input type="text" class="form-control" placeholder="Search..." name="name">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </span>
+            </form>
+        </div>
+    </div>
     <table class="table table-striped">
         <thead>
             <tr>

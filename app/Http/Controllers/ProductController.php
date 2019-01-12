@@ -9,6 +9,7 @@ use \App\ProductCategory;
 use \App\Category;
 use \App\Comment;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
 
 class ProductController extends Controller
 {
@@ -17,56 +18,37 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = [];
-        $product_ids = [];
-        $total;
-        if(!isset($_GET['color'])) {
-            $products =  Product::paginate(8);
-            foreach($products as $product) {
-                $attribute = Stock::where('product_id', '=', $product->id)->orderBy('selling_price', 'ASC')->first();
-                $product->attribute = $attribute;
+        $total = 10;
+        $query = $request->all();
+        unset($query['page']);
 
-                $image = DB::table('product_images')->where('product_id', '=', $product->id)->value('source');
-                $product->image = $image; 
-
-                $selling_price = DB::table('stock')->where('product_id', '=', $product->id)->value('selling_price');
-                $product->selling_price = $selling_price;          
-            }
-            $total = count($products);
-        return view('user.products.index', ['products' => $products,  'total' => $total]);
-        } else {
-            $color_id = DB::table('colors')->where('name', '=', $_GET['color'])->get();
-            if(isset($color_id[0])) {
-                $collection = DB::table('stock')->where('color_id', '=', $color_id[0]->id)->get();
-                foreach ($collection as $product) {
-                   $product_ids[] = $product->product_id;
-                }
-                $product_ids = array_unique($product_ids);
-                foreach ($product_ids as $product_id) {
-                    $products[] = DB::table('products')->where('id', '=', $product_id)->get();
-                }
-                foreach($products as $product) {
-                    
-                    $attribute = Stock::where('product_id', '=', $product[0]->id)->orderBy('selling_price', 'ASC')->first();
-                    $product->attribute = $attribute;
-
-                    $image = DB::table('product_images')->where('product_id', '=', $product[0]->id)->value('source');
-                    $product->image = $image; 
-
-                    $selling_price = DB::table('stock')->where('product_id', '=', $product[0]->id)->value('selling_price');
-                    $product->selling_price = $selling_price;          
-                }
-               
-            }
-             $total = count($products);
-            // print_r($products[0]);die();
-            unset($_GET['color']);
-            return view('user.products.filterProduct', ['products' => $products, 'total' => $total] );
+        if($query['name']) {
+            $name = $query['name'];
+            unset($query['name']);
         }
-            
+
+        if($name) {
+            $products = Product::leftjoin('product_category', 'products.id', '=', 'product_category.product_id')
+                ->leftjoin('categories', 'categories.id', '=', 'product_category.category_id')
+                ->leftjoin('stock', 'products.id', '=', 'stock.product_id')
+                ->leftjoin('product_images', 'products.id', '=', 'product_images.product_id')
+                ->groupBy('products.id')
+                ->where($query)
+                ->where('product_name', 'like', '%'.$name.'%')
+                ->paginate(9);
+        } else {
+            $products = Product::leftjoin('product_category', 'products.id', '=', 'product_category.product_id')
+                ->leftjoin('categories', 'categories.id', '=', 'product_category.category_id')
+                ->leftjoin('stock', 'products.id', '=', 'stock.product_id')
+                ->leftjoin('product_images', 'products.id', '=', 'product_images.product_id')
+                ->groupBy('products.id')
+                ->where($query)
+                ->paginate(9);
+        }
         
+        return view('user.products.index', ['products' => $products->appends(Input::except('page')),  'total' => $total]);    
     }
 
     /**
@@ -183,44 +165,19 @@ class ProductController extends Controller
         return ['selling_price' => $stock->selling_price, 'current_stock' => $stock->id];
     }
 
-    public function search() {
-        $total;
-        if(isset($_GET['search'])) {
-            $query =$_GET['search'];
+    public function search(Request $request) {
+        $products = Product::leftjoin('stock', 'products.id', '=', 'stock.product_id')
+                ->leftjoin('product_images', 'products.id', '=', 'product_images.product_id')
+                ->groupBy('products.id')
+                ->select(DB::raw(
+                    'products.*, product_images.source, stock.selling_price'
+                ))
+                ->where('product_name', 'like', '%'.$request->get('name').'%')
+                ->limit(5)
+                ->get();
 
-
-         $products =  DB::table('products')->where('product_name', 'like', '%'.$query.'%')->orWhere('description', 'like', '%'.$query.'%')->paginate(9);
-         foreach($products as $product) {
-            $attribute = Stock::where('product_id', '=', $product->id)->orderBy('selling_price', 'ASC')->first();
-            $product->attribute = $attribute;
-
-            $image = DB::table('product_images')->where('product_id', '=', $product->id)->value('source');
-            $product->image = $image; 
-
-            $selling_price = DB::table('stock')->where('product_id', '=', $product->id)->value('selling_price');
-            $product->selling_price = $selling_price;          
-        }
-        $total=count($products);
-        return view('user.products.search', ['products' => $products, 'total'=>$total]);
-        }
-        if(isset($_GET['ajaxQuery'])) {
-            $query =$_GET['ajaxQuery'];
-            $products =  DB::table('products')->where('product_name', 'like', '%'.$query.'%')->orWhere('description', 'like', '%'.$query.'%')->limit(5)->get();
-            foreach($products as $product) {
-                $attribute = Stock::where('product_id', '=', $product->id)->orderBy('selling_price', 'ASC')->first();
-                $product->attribute = $attribute;
-
-                $image = DB::table('product_images')->where('product_id', '=', $product->id)->value('source');
-                $product->image = $image; 
-
-                $selling_price = DB::table('stock')->where('product_id', '=', $product->id)->value('selling_price');
-                $product->selling_price = $selling_price;          
-            }
-            return $products;
-        }
-        
+        return $products;
     }
-
 
     public function getSubProduct($type) {
         if($type != 'product') {
@@ -245,5 +202,18 @@ class ProductController extends Controller
             }
         }
 
+    public function getCategories() {
+        $categories = Category::all();
+        return ['categories' => $categories];
+    }
 
+    public function getAllColors() {
+        $colors = \App\Color::all();
+        return ['colors' => $colors];
+    }
+
+    public function getAllSizes() {
+        $sizes = \App\Size::all();
+        return ['sizes' => $sizes];
+    }
 }

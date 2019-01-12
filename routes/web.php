@@ -25,6 +25,10 @@ Route::get('/products/{id}', 'ProductController@show');
 Route::get('/product/colors','ProductController@getColors');
 Route::get('/product/price','ProductController@getPrice');
 
+Route::get('/categories', 'ProductController@getCategories');
+Route::get('/colors', 'ProductController@getAllColors');
+Route::get('/sizes', 'ProductController@getAllSizes');
+
 // routes user
 Route::middleware(['auth'])->group(function () {
     Route::get('/cart','CartController@getCart');

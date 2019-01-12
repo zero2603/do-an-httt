@@ -120,3 +120,14 @@ a {
     border-radius: 100%;
     object-fit: contain;
 }
+
+#suggest {
+    background: #fff;
+    border: solid 1px #ecf0f1; 
+}
+
+#suggest li {
+    border-bottom: solid 1px #ecf0f1; 
+    padding: 5px 0px;
+    height: 55px;
+}

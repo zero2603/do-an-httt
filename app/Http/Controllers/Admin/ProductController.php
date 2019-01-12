@@ -26,9 +26,20 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products =  Product::paginate(10);
+        $query = $request->all();
+        unset($query['_token']);
+
+        // if(array_key_exists ('name', $query)) {
+        //     $name = $query['name'];
+        //     unset($query['name']);
+        //     $users = User::where($query)
+        //         ->where('product_name', 'LIKE', '%'.$name.'%')
+        //         ->paginate(10);
+        // } else {
+            $products =  Product::where($query)->paginate(10);
+        // }
         return view('admin.products.index', ['products' => $products]);
     }
 

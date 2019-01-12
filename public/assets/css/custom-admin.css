@@ -77,3 +77,7 @@
 .chart-area {
     margin-bottom: 20px;
 }
+
+.custom-search-form {
+    max-width: 30%;
+}

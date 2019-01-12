@@ -455,6 +455,13 @@
         };
         
     </script>
+    <script>
+        var url = new URL(window.location.href);
+        var urlParams = new URLSearchParams(url.search.slice(1));
+        $(document).ready(function(){
+            $('#headerSearch').val(urlParams.get('name'));
+        })
+    </script>
 
 </body>
 

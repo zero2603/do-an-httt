@@ -135,12 +135,10 @@
     </div>
 </section>
 <script>
-     var url = new URL(window.location.href);
-        var urlParams = new URLSearchParams(url.search.slice(1));
+    var url = new URL(window.location.href);
+    var urlParams = new URLSearchParams(url.search.slice(1));
 
     $(document).ready(function(){
-       
-
         $.ajax({
             url: "/categories",
             method: "GET",

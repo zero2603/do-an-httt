@@ -14,6 +14,7 @@ use \App\Comment;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Input;
 
 class ProductController extends Controller
 {
@@ -28,19 +29,45 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $query = $request->all();
-        unset($query['_token']);
+        $categories = Category::all();
+        $colors = Color::all();
+        $sizes = Size::all(); 
 
-        // if(array_key_exists ('name', $query)) {
-        //     $name = $query['name'];
-        //     unset($query['name']);
-        //     $users = User::where($query)
-        //         ->where('product_name', 'LIKE', '%'.$name.'%')
-        //         ->paginate(10);
-        // } else {
-            $products =  Product::where($query)->paginate(10);
-        // }
-        return view('admin.products.index', ['products' => $products]);
+        $total = 10;
+        $query = $request->all();
+        unset($query['page']);
+        $name = null;
+
+        if(array_key_exists('name', $query)) {
+            $name = $query['name'];
+            unset($query['name']);
+        }
+
+        if($name) {
+            $products = Product::leftjoin('product_category', 'products.id', '=', 'product_category.product_id')
+                ->leftjoin('categories', 'categories.id', '=', 'product_category.category_id')
+                ->leftjoin('stock', 'products.id', '=', 'stock.product_id')
+                ->leftjoin('product_images', 'products.id', '=', 'product_images.product_id')
+                ->groupBy('products.id')
+                ->where($query)
+                ->where('product_name', 'like', '%'.$name.'%')
+                ->paginate(9);
+        } else {
+            $products = Product::leftjoin('product_category', 'products.id', '=', 'product_category.product_id')
+                ->leftjoin('categories', 'categories.id', '=', 'product_category.category_id')
+                ->leftjoin('stock', 'products.id', '=', 'stock.product_id')
+                ->leftjoin('product_images', 'products.id', '=', 'product_images.product_id')
+                ->groupBy('products.id')
+                ->where($query)
+                ->paginate(10);
+        }
+        
+        return view('admin.products.index', [
+            'products' => $products->appends(Input::except('page')), 
+            'categories' => $categories,
+            'colors' => $colors,
+            'sizes' => $sizes    
+        ]);
     }
 
     /**

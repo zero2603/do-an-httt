@@ -90,10 +90,10 @@
                             <div class="single-product-wrapper">
                                 <!-- Product Image -->
                                 <div class="product-img">
-                                    @if($product->image)
-                                    <img src="{{$product->image}}" alt="">
+                                    @if($product->source)
+                                        <img src="{{$product->source}}" alt="">
                                     @else
-                                    <img src="{{url("/")."/assets/img/product_image_placeholder.png"}}" alt="">
+                                        <img src="{{url("/")."/assets/img/product_image_placeholder.png"}}" alt="">
                                     @endif
                                     <!-- Hover Thumb -->
                                     <img class="hover-img" src="" alt="">

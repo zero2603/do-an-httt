@@ -23,8 +23,9 @@ class ProductController extends Controller
         $total = 10;
         $query = $request->all();
         unset($query['page']);
+        $name = null;
 
-        if($query['name']) {
+        if(array_key_exists('name', $query)) {
             $name = $query['name'];
             unset($query['name']);
         }

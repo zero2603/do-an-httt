@@ -9,6 +9,11 @@
     </button>
 </a>
 <hr/>
+<div class="row">
+    <div class="col-sm-3">
+        <input type="text" class="form-control" name="name" id="name" onchange="searchName(this);" placeholder="Tìm theo tên..."/>
+    </div>
+</div>
 
 <div>
     @if (\Session::has('alert'))
@@ -73,6 +78,25 @@
             form.setAttribute('action', url);
             form.submit();
         }
+    }
+</script>
+<script>
+    var timer = 0;
+    var url = new URL(window.location.href);
+    var urlParams = new URLSearchParams(url.search.slice(1));
+
+    document.getElementById("name").value = urlParams.get('name');
+
+    function searchName(item) {
+        clearTimeout(timer);
+        timer = setTimeout(function() {
+            if(item.value) {
+                urlParams.set(item.name, item.value);
+            } else {
+                urlParams.delete(item.name, item.value);
+            }
+            window.location.href = window.location.origin + '/admin/categories?' + urlParams.toString();
+        }, 1000);
     }
 </script>
 

@@ -15,14 +15,14 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        // $categories = Category::where('parent_id', '=', NULL)->get();
-        // foreach($categories as $category) {
-        //     $children = Category::where('parent_id', '=', $category->id)->get();
-        //     $category->children = $children;
-        // }
-        $categories = Category::paginate(10);
+        $query = $request->all();
+        if(array_key_exists('name', $query)) {
+            $categories = Category::where([['name', 'like', '%'.$query['name'].'%']])->paginate(10);
+        } else {
+            $categories = Category::paginate(10);
+        }
 
         return view('admin.categories.index', ['categories' => $categories]);
     }

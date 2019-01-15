@@ -131,3 +131,7 @@ a {
     padding: 5px 0px;
     height: 55px;
 }
+
+.product-price {
+    color: #ff084e!important;
+}

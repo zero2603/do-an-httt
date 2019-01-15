@@ -105,6 +105,9 @@
                                     <a href="/user/profile">Profile cá nhân</a>
                                 </li>
                                 <li>
+                                        <a href="/orders">Đơn hàng của tôi</a>
+                                    </li>
+                                <li>
                                         <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
                                                     document.getElementById('logout-form').submit();">

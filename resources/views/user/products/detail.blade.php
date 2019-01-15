@@ -2,6 +2,12 @@
 
 @section('content')
     <div class="container">
+        <div style="height: 25px;"></div>
+        @if (\Session::has('alert'))
+            <div class="alert alert-danger">
+                    {!! \Session::get('alert') !!}
+            </div>
+        @endif
         <!-- ##### Single Product Details Area Start ##### -->
         <section class="single_product_details_area d-flex align-items-center">
 
@@ -9,9 +15,9 @@
             <div class="single_product_thumb clearfix">
                 <div class="product_thumbnail_slides owl-carousel">
                         @foreach ($product->images as $image)
-                            <img src="{{$image->source}}" alt="Product Image"/>
+                            <img src="/{{$image->source}}" alt="Product Image"/>
                         @endforeach
-                        <img src="https://soliloquywp.com/wp-content/uploads/2016/08/How-to-Set-a-Default-Featured-Image-in-WordPress.png" alt="Product Image"/>
+                        <img src="https://png.pngtree.com/element_origin_min_pic/17/08/27/f2fafdac2ae42b9179c999e48e1bac2b.jpg" alt="Product Image"/>
                     
                 </div>
             </div>

@@ -38,6 +38,7 @@ class CheckoutController extends Controller
                 carts.quantity, 
                 product_images.source AS product_image")
             )
+            ->groupBy('stock.id')
             ->get();
 
         $total = 0;

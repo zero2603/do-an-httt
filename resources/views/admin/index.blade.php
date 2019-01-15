@@ -25,22 +25,25 @@
         </div>
         <div>
             <h3 class="page-header">Doanh thu</h3>
-            {{-- <div class="row" id="form">
+            <div class="row" id="filter-form">
+                <div class="col-md-3">Bộ lọc doanh thu: </div>
                 <div class="col-md-3">
-                    <select class="form-control" name="month">
+                    <select class="form-control" name="month" onchange="change(this);">
+                        <option value="">Tháng</option>
                         @for($i=1; $i <= 12; $i++)
-                            <option value="{{$i}}">{{$i}}</option>
+                            <option class="month" value="{{$i}}">{{$i}}</option>
                         @endfor
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <select class="form-control" name="year">
-                        <option value="2018">2018</option>
-                        <option value="2019">2019</option>
-                        <option value="2020">2020</option>
+                    <select class="form-control" name="year" onchange="change(this);">
+                        <option value="">Năm</option>
+                        <option class="year" value="2018">2018</option>
+                        <option class="year" value="2019">2019</option>
+                        <option class="year" value="2020">2020</option>
                     </select>
                 </div>
-            </div> --}}
+            </div>
             <div class="container">
                 <div id="chart"></div>
             </div>
@@ -49,11 +52,35 @@
     </div>
     
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
     <script>
         var d = new Date();
-        var month = d.getMonth() + 1;
-        var year = d.getFullYear();
 
+        var url = new URL(window.location.href);
+        var urlParams = new URLSearchParams(url.search.slice(1));
+
+        var month = urlParams.get('month') || d.getMonth() + 1;
+        var year = urlParams.get('year') || d.getFullYear();
+
+        var monthOptions = document.getElementsByClassName("month");
+        for(let element of monthOptions) {
+            if(element.value.toString() === urlParams.get('month')) {
+                element.setAttribute('selected', true);
+            } else {
+                element.removeAttribute('selected');
+            }
+        }
+
+        var yearOptions = document.getElementsByClassName("year");
+        for(let element of yearOptions) {
+            if(element.value.toString() === urlParams.get('year')) {
+                element.setAttribute('selected', true);
+            } else {
+                element.removeAttribute('selected');
+            }
+        }
+
+        // call api statistic
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -92,28 +119,18 @@
                 console.log(err);
             }
         })
-    
-        
-        // google.charts.setOnLoadCallback(drawChart);
 
-        // function drawChart(data) {
-        //     // var data = google.visualization.arrayToDataTable([
-        //     // ['Year', 'Sales', 'Expenses'],
-        //     // ['2004',  1000,      400],
-        //     // ['2005',  1170,      460],
-        //     // ['2006',  660,       1120],
-        //     // ['2007',  1030,      540]
-        //     // ]);
-
-        //     var options = {
-        //     title: 'Company Performance',
-        //     // curveType: 'function',
-        //     legend: { position: 'bottom' }
-        //     };
-
-        //     var chart = new google.visualization.LineChart(document.getElementById('chart'));
-
+        function change(item) {
+            if(item.value) {
+                urlParams.set(item.name, item.value);
+            } else {
+                urlParams.delete(item.name, item.value);
+            }
             
-        // }
+            if(urlParams.get('month') && urlParams.get('year')) {
+                window.location.href = window.location.origin + '/admin?' + urlParams.toString();
+            }
+            
+        }
     </script>
 @endsection

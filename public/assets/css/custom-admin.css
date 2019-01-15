@@ -81,3 +81,7 @@
 .custom-search-form {
     max-width: 30%;
 }
+
+div#filter-form {
+    margin: 0 0 20px 0px;
+}

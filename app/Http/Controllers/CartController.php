@@ -33,6 +33,7 @@ class CartController extends Controller
                 carts.quantity, 
                 product_images.source AS product_image")
             )
+            ->groupBy('stock.id')
             ->get();
 
         $total = 0;
@@ -44,7 +45,14 @@ class CartController extends Controller
     }
 
     public function add(Request $request) {
-        // print_r($request->get('stock_id'));
+        $stock_id = $request->get('stock_id');
+        print_r($request->get('stock_id'));
+
+        $item = Cart::where('stock_id', $stock_id)->first();
+        if(!empty($item)) {
+            return redirect()->back()->with(['alert' => 'Sản phẩm này đã tồn tại trong giỏ hàng!']);
+        }
+
         Cart::create([
             'user_id' => Auth::id(),
             'stock_id' => $request->get('stock_id'),

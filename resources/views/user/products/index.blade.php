@@ -111,7 +111,7 @@
                                             <h6>{{$product->product_name}}</h6>
                                         </a>
                                     </span>
-                                    <p class="product-price">{{$product->selling_price}} <span>VND</span></p>
+                                    <p class="product-price">{{$product->selling_price}} VND</p>
 
                                     <!-- Hover Content -->
                                     {{-- <div class="hover-content">

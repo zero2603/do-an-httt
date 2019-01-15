@@ -51,6 +51,7 @@ class ProductController extends Controller
                 ->groupBy('products.id')
                 ->where($query)
                 ->where('product_name', 'like', '%'.$name.'%')
+                ->select(DB::raw('products.*, categories.name, product_images.source'))
                 ->paginate(9);
         } else {
             $products = Product::leftjoin('product_category', 'products.id', '=', 'product_category.product_id')
@@ -59,6 +60,7 @@ class ProductController extends Controller
                 ->leftjoin('product_images', 'products.id', '=', 'product_images.product_id')
                 ->groupBy('products.id')
                 ->where($query)
+                ->select(DB::raw('products.*, categories.name, product_images.source'))
                 ->paginate(10);
         }
         
@@ -248,7 +250,7 @@ class ProductController extends Controller
         }
         Stock::where('product_id', '=', $id)->delete();
         Stock::insert($attrArray);
-        return redirect('/admin/products');
+        return redirect()->back();
     }
 
     /**

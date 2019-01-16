@@ -35,6 +35,9 @@
                     <button type="submit" class="btn btn-primary">Cập nhật</button>
                 </div>
                 <div class="col-sm-1">
+                    <button type="reset" class="btn btn-secondary">Hủy</button>
+                </div>
+                <div class="col-sm-1">
                     <button type="button" class="btn btn-danger" onclick="remove()">Xóa</button>
                 </div>
             </div>    

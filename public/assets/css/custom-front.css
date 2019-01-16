@@ -135,3 +135,11 @@ a {
 .product-price {
     color: #ff084e!important;
 }
+
+#productSize, #productColor {
+    display: block !important;
+}
+
+div.nice-select {
+    display: none;
+}

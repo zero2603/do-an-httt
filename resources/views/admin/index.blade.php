@@ -44,7 +44,7 @@
                     </select>
                 </div>
             </div>
-            <div class="container">
+            <div>
                 <div id="chart"></div>
             </div>
             
@@ -89,7 +89,7 @@
             url : `/admin/revenue?month=${month}&year=${year}`,
             success : function(response){
                 if(response){
-                    
+
                     google.charts.load('current', {'packages':['line']});
                     
                     var data = [
@@ -103,7 +103,7 @@
                         var chart_data = new google.visualization.arrayToDataTable(data);
                         var options = {
                             chart: {
-                                title: `Doanh thu trong tháng ${month}/${year}`
+                                title: `Tổng có ${response.orders} đơn hàng trong tháng. Doanh thu trong tháng ${month}/${year}`
                             },
                             width: 900,
                             height: 500

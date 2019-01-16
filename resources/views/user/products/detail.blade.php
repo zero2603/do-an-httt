@@ -34,12 +34,12 @@
                 <div class="cart-form clearfix" >
                     <!-- Select Box -->
                     <div class="select-box d-flex mt-50 mb-30">
-                        <select name="productSize" id="productSize" class="mr-5" onchange="changeSize();">
+                        <select name="productSize" class="nice-select" id="productSize" class="mr-5" onchange="changeSize();">
                             @foreach ($product->sizes as $size)
                                 <option value="{{$size->id}}">{{$size->name}}</option>
                             @endforeach
                         </select>
-                        <select name="productColor" id="productColor" onchange="changeColor();">
+                        <select name="productColor" class="nice-select" id="productColor" onchange="changeColor();">
                             @foreach ($product->colors as $color)
                                 <option value="{{$color->id}}">{{$color->name}}</option>
                             @endforeach

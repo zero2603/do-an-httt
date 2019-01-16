@@ -51,7 +51,7 @@ class ProductController extends Controller
                 ->groupBy('products.id')
                 ->where($query)
                 ->where('product_name', 'like', '%'.$name.'%')
-                ->select(DB::raw('products.*, categories.name, product_images.source'))
+                ->select(DB::raw('products.*, categories.name AS category_name, product_images.source, stock.selling_price'))
                 ->paginate(9);
         } else {
             $products = Product::leftjoin('product_category', 'products.id', '=', 'product_category.product_id')
@@ -60,7 +60,7 @@ class ProductController extends Controller
                 ->leftjoin('product_images', 'products.id', '=', 'product_images.product_id')
                 ->groupBy('products.id')
                 ->where($query)
-                ->select(DB::raw('products.*, categories.name, product_images.source'))
+                ->select(DB::raw('products.*, categories.name AS category_name, product_images.source, stock.selling_price'))
                 ->paginate(10);
         }
         

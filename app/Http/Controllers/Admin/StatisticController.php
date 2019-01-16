@@ -23,8 +23,14 @@ class StatisticController extends Controller
 
     public function getRevenue(Request $request) {
         $month = (int) $request->get('month');
+        $year = (int) $request->get('year');
 
-        $orderItems = OrderItem::where(DB::raw('month(created_at)'), '=', $month)
+        $orders = Order::where([
+            [DB::raw('month(created_at)'), '=', $month], 
+            [DB::raw('year(created_at)'), '=', $year]
+        ])->count();
+
+        $orderItems = OrderItem::where([[DB::raw('month(created_at)'), '=', $month], [DB::raw('year(created_at)'), '=', $year]])
             ->select(DB::raw(
                 'SUM(order_item_quantity * order_item_price) AS revenue, day(created_at) AS day'
             ))
@@ -53,6 +59,6 @@ class StatisticController extends Controller
         usort($data, function($a, $b) {
             return $a[0] > $b[0];
         });
-        return ['data' => $data];
+        return ['data' => $data, 'orders' => $orders];
     }
 }

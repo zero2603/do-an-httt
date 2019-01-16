@@ -48,19 +48,27 @@
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Tên sản phẩm</th>
-                <th>Mô tả</th>
-                <th>Option</th>
+                <th width="10%">Ảnh</th>
+                <th width="10%">Tên sản phẩm</th>
+                <th width="10%">Danh mục</th>
+                <th width="40%">Mô tả</th>
+                <th width="15%">Giá</th>
+                <th width="15%">Option</th>
             </tr>
         </thead>
         <tbody>
             @foreach($products as $product)
             <tr>
                 <td>{{$product->id}}</td>
+                <td width="10%">
+                    <img src="/{{$product->source}}" class="list-product-images"/>
+                </td>
                 <td>
                     <a href="{{url('admin/products/'.$product->id.'/edit')}}">{{$product->product_name}}</a>
                 </td>
+                <td>{{$product->category_name}}</td>
                 <td>{!!substr($product->description, 0, 200)!!}...</td>
+                <td><b>{{$product->selling_price}} VND</b></td>
                 <td>
                     <div class="row">
                         <div class="col-md-6">

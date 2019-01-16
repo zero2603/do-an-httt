@@ -145,10 +145,11 @@
                         stock_id.val(response.current_stock);
                         $('#productPrice').empty().html(response.selling_price+ " VND");
                         if(response.colors && response.colors != null) {
-                            var rewrite ='';
-                            for(var i = 0; i < (response.colors).length; i++ ) {
-                                rewrite+= "<option value='"+response.colors[i].id+"'>"+response.colors[i].name+"</option>";
+                            var rewrite = [];
+                            for(var i = 0; i < response.colors.length; i++ ) {
+                                rewrite += `<option value='${response.colors[i].id}'>${response.colors[i].name}</option>`;
                             }
+                            
                             $('#productColor').empty().html(rewrite);
                         }
                     }
